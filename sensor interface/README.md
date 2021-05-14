@@ -19,7 +19,7 @@ e.g. SPEC-DGS (manufacturer) produces the CO sensor (sensor model).
 
 ### Sensors
 
-SensorInterface defines two methods to implement: connect_to_port() and get_raw_data()
+SensorInterface (actually an abstract class) defines two methods to implement: connect_to_port() and get_raw_data()
 
 **Note**: "raw data" is arbitrarily defined as the "first accessible" data from a sensor.
 e.g. for a SPEC-DGS sensor that is accomplished by serial.readline() (see spec_dgs.py) and this puts out a host of information which may or may not be important.
