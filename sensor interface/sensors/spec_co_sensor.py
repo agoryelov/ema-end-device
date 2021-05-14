@@ -1,5 +1,5 @@
-from sensors import spec_dgs
-from unit_conversion import ppb_to_ppm
+import spec_dgs
+from ..unit_conversion import ppb_to_ppm
 
 # Copyright Clinton Fernandes (clint.fernandes@gmail.com) 2021
 

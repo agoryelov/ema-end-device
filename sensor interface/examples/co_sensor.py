@@ -1,4 +1,4 @@
-from sensors import spec_co_sensor
+from ..sensors import spec_co_sensor
 
 # Copyright Clinton Fernandes (clint.fernandes@gmail.com) 2021
 

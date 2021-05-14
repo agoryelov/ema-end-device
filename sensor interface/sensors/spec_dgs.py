@@ -1,6 +1,6 @@
 import abc
-from sensors import SensorInterface
-from unit_conversion import celsius_to_kelvin
+import SensorInterface
+from ..unit_conversion import celsius_to_kelvin
 import serial
 
 # Copyright Clinton Fernandes (clint.fernandes@gmail.com) 2021
