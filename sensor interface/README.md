@@ -31,7 +31,14 @@ SensorInterface.print_formatted_data() implements a method that should be called
 
 Each Sensor manufacturer should define an abstract method, format_data(). A sensor model must implement that method to format data in an agreed-upon format. 
 
-
 ### Sensor model
 
 Here you define any model-specific behaviour. For SPEC-DGS sensors this involves implementing format_data() (to be read by SensorInterface.print_formatted_data()
+
+## Units
+
+All measurements should be expressed in [SI units]("https://en.wikipedia.org/wiki/International_System_of_Units"). However, dimensionless quantities, like ppm (parts per million) are not SI and have no SI definition. For consistency, we've decided to standardize to ppm.
+
+The included package, unit_conversion, provides convenient conversions. It is not exhaustive and should be updated as and when a conversion is needed. A different conversion package can be used if desired.
+
+Future updates will have the unit_conversion package external. But there's no telling when that will occur.
