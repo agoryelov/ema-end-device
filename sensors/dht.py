@@ -16,7 +16,7 @@ from sensors import SensorInterface
 from unit_conversion import celsius_to_kelvin
 
 
-class DHT(SensorInterface, metaclass=abc.ABCMeta):
+class dht(SensorInterface, metaclass=abc.ABCMeta):
     """
         Credit for connect_to_port and get_raw_data goes to
         Noah MacRitchie (noah21mac@gmail.com) and Andrey Goryelov (andrey.goryelov@gmail.com)
@@ -27,7 +27,7 @@ class DHT(SensorInterface, metaclass=abc.ABCMeta):
     # TODO: pass it in like : gpio_in = 1, named params
    
     def __init__(self, uid: int, gpio_in: str, model : str ) -> None:
-        super().__init__()
+        # super().__init__()
         self.__uid = uid
         self.__gpio_in = gpio_in
         # self.__timeout = timeout
