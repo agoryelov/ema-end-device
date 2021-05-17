@@ -1,7 +1,6 @@
-import abc
-import SensorInterface
-from ..unit_conversion import celsius_to_kelvin
 import serial
+from sensors import SensorInterface
+from unit_conversion import celsius_to_kelvin
 
 # Copyright Clinton Fernandes (clint.fernandes@gmail.com) 2021
 
@@ -20,7 +19,7 @@ DATA_INDICES = {
 }
 
 
-class spec_dgs(SensorInterface, metaclass=abc.ABCMeta):
+class spec_dgs(SensorInterface):
     """
         Credit for connect_to_sensor and get_raw_data goes to
         Noah MacRitchie (noah21mac@gmail.com) and Andrey Goryelov (andrey.goryelov@gmail.com)
@@ -33,13 +32,7 @@ class spec_dgs(SensorInterface, metaclass=abc.ABCMeta):
         self.__baud_rate = baud_rate
         self.__reading = ()
 
-    @classmethod
-    def __subclasshook__(cls, subclass):
-        return(hasattr(subclass, 'format_data') and
-               callable(subclass.format_data) or
-               NotImplemented)
-
-    def connect_to_port(self) -> serial:
+    def connect_to_sensor(self) -> serial:
         # TODO error checking?
         ser = serial.Serial(self.__device, self.__baud_rate, timeout=self.__timeout, parity=serial.PARITY_NONE)
         return ser
@@ -53,7 +46,7 @@ class spec_dgs(SensorInterface, metaclass=abc.ABCMeta):
         start_reading = 'c'
         end_reading = 'R'
 
-        ser = self.connect_to_port()
+        ser = self.connect_to_sensor()
         ser.write(start_reading.encode())
         line = ser.readline()
         ser.write(end_reading.encode())
@@ -116,15 +109,3 @@ class spec_dgs(SensorInterface, metaclass=abc.ABCMeta):
 
     def get_second(self) -> int:
         return int(self.__reading[DATA_INDICES["second"]])
-
-    @abc.abstractmethod
-    def format_data(self) -> dict:
-        f"""
-        Provides formatted sensor data for output.
-        
-        Specifications:
-        - key names must be fully spelled out. e.g. 'carbon_monoxide', 'relative_humidity'
-        
-        :return: {dict} 
-        """
-        raise NotImplementedError
