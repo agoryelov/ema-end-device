@@ -12,7 +12,7 @@ class spec_co_sensor(spec_dgs):
         reading = {
             "uid": self.get_uid(),
             "serial_number": self.get_serial_number(),
-            "co": ppb_to_ppm(self.get_measurement()),
+            "carbon_monoxide": ppb_to_ppm(self.get_measurement()),
             "temperature": self.get_temperature(),
             "relative_humidity": self.get_relative_humidity(),
         }

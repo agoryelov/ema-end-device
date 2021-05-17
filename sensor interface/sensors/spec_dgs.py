@@ -119,4 +119,12 @@ class spec_dgs(SensorInterface, metaclass=abc.ABCMeta):
 
     @abc.abstractmethod
     def format_data(self) -> dict:
+        f"""
+        Provides formatted sensor data for output.
+        
+        Specifications:
+        - key names must be fully spelled out. e.g. 'carbon_monoxide', 'relative_humidity'
+        
+        :return: {dict} 
+        """
         raise NotImplementedError
