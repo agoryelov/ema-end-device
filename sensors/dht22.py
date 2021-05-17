@@ -1,6 +1,9 @@
 # inheritance library
 import abc
+
+# installed Adafruit_DHT lib
 import Adafruit_DHT
+
 # GPIO lib
 import RPi.GPIO as GPIO           # import RPi.GPIO module
 
@@ -16,17 +19,28 @@ from sensors import SensorInterface
 from unit_conversion import celsius_to_kelvin
 
 
+DATA_INDICES = {
+    "serial_number": 0,
+    "measurement": 1,
+    "temperature": 2,
+    "relative_humidity": 3,
+    "raw_sensor": 4,
+    "temp_digital": 5,
+    "rh_digital": 6,
+    "day": 7,
+    "hour": 8,
+    "minute": 9,
+    "second": 10
+}
+
+
 class DHT(SensorInterface, metaclass=abc.ABCMeta):
     """
         Credit for connect_to_port and get_raw_data goes to
         Noah MacRitchie (noah21mac@gmail.com) and Andrey Goryelov (andrey.goryelov@gmail.com)
     """
 
-    # TODO: what is timeout ?
-    # TODO: It is just a GPIO data in, not serial connection.
-    # TODO: pass it in like : gpio_in = 1, named params
-   
-    def __init__(self, uid: int, gpio_in: str, model : str ) -> None:
+    def __init__(self, uid: int, gpio_in: int,  model : str ) -> None:
         super().__init__()
         self.__uid = uid
         self.__gpio_in = gpio_in
@@ -39,29 +53,23 @@ class DHT(SensorInterface, metaclass=abc.ABCMeta):
             self.__model = 22
         self.__reading = () # TODO meaning?
 
-    @classmethod
-    def __subclasshook__(cls, subclass):
-        return(hasattr(subclass, 'format_data') and
-               callable(subclass.format_data) or
-               NotImplemented)
 
     # Sets the GPIO to be in input mode
     def connect_to_port(self) -> int:
         DHT_in = self.__gpio_in
-        # TODO return a value for error checking?
+        # TODO error checking?
         GPIO.setmode(GPIO.BCM)                 # choose BCM or BOARD
         status = GPIO.setup(DHT_in, GPIO.IN)  # set a port/pin as an input
         return status
 
-    # TODO: necessity?
+    # take reading:
     def take_reading(self) -> int:
-        return 0
-    # TODO: necessary?
-    def get_raw_data(self)-> float:
-        return float()
+        DHT_in = self.__device
+        # TODO error checking?
+        GPIO.setmode(GPIO.BCM)                 # choose BCM or BOARD
+        Adafruit_DHT.read(self.__, DHT_PIN)
 
-    def get_temperature(self) -> float:
-        return float(Adafruit_DHT.read(self.__model,self.__gpio_in)[1])
-        
-    def get_relative_humidity(self) -> float:
-        return float(Adafruit_DHT.read(self.__model,self.__gpio_in)[0])
+    # TODO : no raw data or the raw data is dealt with by AdaFruit Library
+    # def get_raw_data(self) -> bytes:
+    def get_uid(self):
+        return self.__uid
