@@ -22,7 +22,7 @@ DATA_INDICES = {
 
 class spec_dgs(SensorInterface, metaclass=abc.ABCMeta):
     """
-        Credit for connect_to_port and get_raw_data goes to
+        Credit for connect_to_sensor and get_raw_data goes to
         Noah MacRitchie (noah21mac@gmail.com) and Andrey Goryelov (andrey.goryelov@gmail.com)
     """
 
