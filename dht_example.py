@@ -13,8 +13,8 @@ UUID = 5001 # Some random fake uuid
 
 def main():
     dht22_obj = dht22(UUID, GPIO_IN, MODEL)
-    dht22_obj.take_reading()
-    dht22_obj.print_data()
+    # dht22_obj.take_reading()
+    dht22_obj.print_formatted_data()
 
 if __name__ == '__main__':
     main()

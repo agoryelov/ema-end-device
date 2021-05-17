@@ -58,14 +58,14 @@ class dht22(dht):
         GPIO.setmode(GPIO.BCM)                 # choose BCM or BOARD
         Adafruit_DHT.read(self.__model, DHT_in)
             # take reading:
-    def print_data(self) -> int:
-        DHT_in = self.__gpio_in
-        # TODO error checking?
-        GPIO.setmode(GPIO.BCM)                 # choose BCM or BOARD
-        temp, humidity = Adafruit_DHT.read(self.__model, DHT_in)
-        #  = Adafruit_DHT.read(self.__model, DHT_in)
-        print("temperature=", celsius_to_kelvin(temp), "K")
-        print("humidity=", humidity, "%")
+    # def print_data(self) -> int:
+    #     DHT_in = self.__gpio_in
+    #     # TODO error checking?
+    #     GPIO.setmode(GPIO.BCM)                 # choose BCM or BOARD
+    #     temp, humidity = Adafruit_DHT.read(self.__model, DHT_in)
+    #     #  = Adafruit_DHT.read(self.__model, DHT_in)
+    #     print("temperature=", celsius_to_kelvin(temp), "K")
+    #     print("humidity=", humidity, "%")
 
     # TODO : no raw data or the raw data is dealt with by AdaFruit Library
     # def get_raw_data(self) -> bytes:
