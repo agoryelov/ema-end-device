@@ -51,13 +51,14 @@ class dht22(dht):
         status = GPIO.setup(DHT_in, GPIO.IN)  # set a port/pin as an input
         return status
 
-    # take reading:
-    def take_reading(self) -> int:
-        DHT_in = self.__gpio_in
-        # TODO error checking?
-        GPIO.setmode(GPIO.BCM)                 # choose BCM or BOARD
-        Adafruit_DHT.read(self.__model, DHT_in)
-            # take reading:
+    # # take reading:
+    # def take_reading(self) -> int:
+    #     DHT_in = self.__gpio_in
+    #     # TODO error checking?
+    #     GPIO.setmode(GPIO.BCM)                 # choose BCM or BOARD
+    #     Adafruit_DHT.read(self.__model, DHT_in)
+    #         # take reading:
+
     # def print_data(self) -> int:
     #     DHT_in = self.__gpio_in
     #     # TODO error checking?

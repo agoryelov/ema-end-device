@@ -15,6 +15,10 @@ from sensors import SensorInterface
 # https://github.com/clintonbf/sensor_interface/tree/master/unit_conversion
 from unit_conversion import celsius_to_kelvin
 
+DATA_INDICES = {
+    "temperature": 0,
+    "relative_humidity": 1,
+    }
 
 class dht(SensorInterface, metaclass=abc.ABCMeta):
     """
@@ -46,7 +50,7 @@ class dht(SensorInterface, metaclass=abc.ABCMeta):
                NotImplemented)
 
     # Sets the GPIO to be in input mode
-    def connect_to_port(self) -> int:
+    def connect_to_sensor(self) -> int:
         DHT_in = self.__gpio_in
         # TODO return a value for error checking?
         GPIO.setmode(GPIO.BCM)                 # choose BCM or BOARD
@@ -54,23 +58,38 @@ class dht(SensorInterface, metaclass=abc.ABCMeta):
         return status
 
     # TODO: necessity?
-    def take_reading(self) -> int:
-        return 0
+    def take_reading(self) -> int:     
+        self.__reading = Adafruit_DHT.read_retry(self.__model, self.__gpio_in)
+        # print(self.__reading)
+
+
     # TODO: necessary?
     def get_raw_data(self)-> float:
-        return float()
+        DHT_in = self.__gpio_in   
+        GPIO.setmode(GPIO.BCM)  # choose BCM or BOARD
+        temp, humidity = Adafruit_DHT.read_retry(self.__model, DHT_in)
 
     def get_temperature(self) -> float:
-        return float(Adafruit_DHT.read(self.__model,self.__gpio_in)[1])
-        
+        # return celsius_to_kelvin(float(Adafruit_DHT.read_retry(self.__model,self.__gpio_in)[1]))
+        return celsius_to_kelvin(self.__reading[0])
+
     def get_relative_humidity(self) -> float:
-        return float(Adafruit_DHT.read(self.__model,self.__gpio_in)[0])
+        # return float(Adafruit_DHT.read_retry(self.__model,self.__gpio_in)[0])
+        return self.__reading[1]
     
-    def print_formatted_data(self) -> int:
-        DHT_in = self.__gpio_in
-        # TODO error checking?
-        GPIO.setmode(GPIO.BCM)                 # choose BCM or BOARD
-        temp, humidity = Adafruit_DHT.read(self.__model, DHT_in)
-        #  = Adafruit_DHT.read(self.__model, DHT_in)
-        print("temperature=", celsius_to_kelvin(temp), "K")
-        print("humidity=", humidity, "%")
+    # def print_formatted_data(self) -> int:
+    #     DHT_in = self.__gpio_in
+    #     # TODO error checking?
+    #     GPIO.setmode(GPIO.BCM)                 # choose BCM or BOARD
+    #     temp, humidity = Adafruit_DHT.read_retry(self.__model, DHT_in)
+    #     #  = Adafruit_DHT.read(self.__model, DHT_in)
+    #     print("temperature=", celsius_to_kelvin(temp), "K")
+    #     print("humidity=", humidity, "%")
+    
+    def format_data(self) -> dict :
+        readings = {
+            "uid": self.get_uid(),
+            "temperature": self.get_temperature(),
+            "relative_humidity": self.get_relative_humidity(),
+        }
+        return readings
