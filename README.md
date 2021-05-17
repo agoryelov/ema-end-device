@@ -1,7 +1,7 @@
 #  python DHT sensor driver
 
 ## Prerequisite
- - If your rpi is not of model 4B, install the Adafruit_DHT driver here:
+ - If your rpi is **NOT** of model 4B, install the Adafruit_DHT driver here:
    https://pypi.org/project/Adafruit-DHT/
    
  - If your rpi is of model 4B, use this one:
