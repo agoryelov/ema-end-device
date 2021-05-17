@@ -1,4 +1,5 @@
 import abc
+import json
 
 
 # Copyright Clinton Fernandes (clint.fernandes@gmail.com) 2021
@@ -21,5 +22,11 @@ class SensorInterface(metaclass=abc.ABCMeta):
         raise NotImplementedError
 
     def print_formatted_data(self, data: dict):
-        for (key) in data:
-            print(key, ":", data[key])
+        f"""
+        Outputs formatted sensor data as a JSON.
+        
+        :param data: {dict} 
+        """
+        json_data = json.dumps(data)
+
+        print(json_data)
