@@ -5,7 +5,7 @@ from sensors import SensorReadError
 
 
 DEVICE = '/dev/ttyUSB0'
-TIMEOUT = 10
+TIMEOUT = 3
 BAUD_RATE = 9600
 
 UUID = 5000

@@ -65,6 +65,9 @@ Example: [SpecDgs.py](sensors/SpecDgs.py)
 
 This class extends the manufacturer class & must implement [SensorDataFormatter.py](sensors/SensorDataFormatter.py)
 
+Unless you have a very good reason you should use `Sensor.print_formatted_data()` to output your data. This will keep
+things nice and consistent.
+
 Example: [SpecCoSensor.py](sensors/SpecCoSensor.py)
 
 
@@ -76,9 +79,13 @@ Example: [co_sensor.py](./examples/co_sensor.py)
 
 ### SPEC DGS
 
-1. SPEC DGS sensors take a timeout property to read from. If the timeout is set insufficiently then a reading will return malformed data.
+SPEC DGS sensors take a timeout property to read from. If the timeout is set insufficiently then a reading will return malformed data.
 A SensorReadError will be thrown in this case and final output will be an error message
 
+### Python package locations
+
+For reasons I don't understand (yet) the sensors/ and unit_conversion/ packages must be in the same directory as the
+harnessing script (co_sensor.py in the examples). See [Installation](#installation)
 
 ## Related topics
 
@@ -86,6 +93,6 @@ A SensorReadError will be thrown in this case and final output will be an error 
 
 All measurements should be expressed in [SI units](https://en.wikipedia.org/wiki/International_System_of_Units). However, dimensionless quantities, like ppm (parts per million) are not SI and have no SI definition. For consistency, we've decided to standardize to ppm.
 
-The included package, [unit_conversion](./unit_conversion), provides a convenient, though non-exhautive library. It should be updated as and when a conversion is needed. A different conversion package can be used if desired.
+The included package, [unit_conversion](./unit_conversion), provides a convenient, though non-exhaustive library. It should be updated as and when a conversion is needed. A different conversion package can be used if desired.
 
 Future updates will have the unit_conversion package external. But there's no telling when that will occur.

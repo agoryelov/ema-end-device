@@ -54,19 +54,18 @@ class SpecDgs(Sensor):
         
         :return: {bytes} 
         """
-        start_reading = 'c'
-        end_reading = 'R'
+        start_reading = '\r'
 
         ser = self.connect_to_sensor()
 
         try:
             ser.write(start_reading.encode())
             line = ser.readline()
-            ser.write(end_reading.encode())
         except SerialException:
             Sensor.print_formatted_data({"error": "reading from sensor"})
             exit(1)
         else:
+            ser.close()
             return line
 
     def take_reading(self):
