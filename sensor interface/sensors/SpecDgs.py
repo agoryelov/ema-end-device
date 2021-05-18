@@ -1,4 +1,5 @@
 import serial
+from serial import SerialException
 from sensors import Sensor
 from sensors.SensorException import SensorReadError
 from unit_conversion import celsius_to_kelvin
@@ -34,9 +35,18 @@ class SpecDgs(Sensor):
         self.__reading = ()
 
     def connect_to_sensor(self) -> serial:
-        # TODO error checking?
-        ser = serial.Serial(self.__device, self.__baud_rate, timeout=self.__timeout, parity=serial.PARITY_NONE)
-        return ser
+        f"""
+        Connects the software to the sensor hardware.
+        
+        :return: {serial} 
+        """
+        try:
+            ser = serial.Serial(self.__device, self.__baud_rate, timeout=self.__timeout, parity=serial.PARITY_NONE)
+        except SerialException:
+            Sensor.print_formatted_data({"error": "connecting to sensor"})
+            exit(1)
+        else:
+            return ser
 
     def get_raw_data(self) -> bytes:
         f"""
@@ -48,11 +58,16 @@ class SpecDgs(Sensor):
         end_reading = 'R'
 
         ser = self.connect_to_sensor()
-        ser.write(start_reading.encode())
-        line = ser.readline()
-        ser.write(end_reading.encode())
 
-        return line
+        try:
+            ser.write(start_reading.encode())
+            line = ser.readline()
+            ser.write(end_reading.encode())
+        except SerialException:
+            Sensor.print_formatted_data({"error": "reading from sensor"})
+            exit(1)
+        else:
+            return line
 
     def take_reading(self):
         """
