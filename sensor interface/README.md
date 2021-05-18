@@ -17,7 +17,7 @@ On a *ix system this is mostly easily done via symlinks. On Windows the files mu
 
 (May 2021): A future goal is to have the packages in pypi or something similar so that they can be installed in the same place as other imported packages.
 
-## Using the interface
+## Using the interface (overview)
 
 We have defined 3 levels in our hierarchy:
 * Sensors
@@ -55,8 +55,9 @@ If the manufacturer class has already been created then only [sensor class imple
 
 ### 1. Implement a manufacturer class
 
-This class must do two things (other properties/behaviours can be defined according to need):
-1. implement [SensorInterface.py](sensors/sensor.py)
+This class must implement [SensorInterface.py](sensors/sensor.py) 
+
+Other properties/behaviours can be defined according to need.
 
 Example: [spec_dgs.py](./sensors/spec_dgs.py)
 
