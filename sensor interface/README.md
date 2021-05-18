@@ -31,7 +31,7 @@ e.g. SPEC (sensor manufacturer) produces the [CO](https://www.digikey.ca/en/prod
 sensor.py (an abstract base class) defines two methods to implement: connect_to_sensor() and get_raw_data()
 
 **Note**: "raw data" is arbitrarily defined as the "first accessible" data from a sensor.
-e.g. for a SPEC-DGS sensor that is accomplished by serial.readline() (see [spec_dgs.py](./sensors/spec_dgs.py)) and this puts out a host of information which may or may not be important.
+e.g. for a SPEC-DGS sensor that is accomplished by serial.readline() (see [SpecDgs.py](sensors/SpecDgs.py)) and this puts out a host of information which may or may not be important.
 By contrast, a DHT-22 sensor, when accessed via tha [AdaFruit library](https://pypi.org/project/adafruit-io/ "Adafuit python library"), outputs data that you are most likely directly interested in. i.e. the "raw data" is the processed data.
 
 sensor.print_formatted_data() implements a method that should be called by any sensor model to standardize output. It accepts a parameter supplied by format_data() (See [Sensor manufacturers](#sensor-manufacturers)).
@@ -45,7 +45,7 @@ A class has been defined for this purpose; see [here](#units)
 
 Here you define any model-specific behaviour. For SPEC-DGS sensors this involves implementing format_data() (to be supplied to sensor.print_formatted_data()
 
-Each Sensor manufacturer must implement [sensor_data_formatter.format_data()](./sensors/sensor_data_formatter.py) to format data in a consistent format.
+Each Sensor manufacturer must implement [SensorDataFormatter.format_data()](sensors/SensorDataFormatter.py) to format data in a consistent format.
 
 
 ## Adding a new sensor to the system
@@ -55,17 +55,17 @@ If the manufacturer class has already been created then only [sensor class imple
 
 ### 1. Implement a manufacturer class
 
-This class must implement [SensorInterface.py](sensors/sensor.py) 
+This class must implement [Sensor.py](sensors/Sensor.py) 
 
 Other properties/behaviours can be defined according to need.
 
-Example: [spec_dgs.py](./sensors/spec_dgs.py)
+Example: [SpecDgs.py](sensors/SpecDgs.py)
 
 ### 2. Implement the sensor class
 
-This class extends the manufacturer class & must implement [sensor_data_formatter.py](./sensors/sensor_data_formatter.py)
+This class extends the manufacturer class & must implement [SensorDataFormatter.py](sensors/SensorDataFormatter.py)
 
-Example: [spec_co_sensor.py](./sensors/spec_co_sensor.py)
+Example: [SpecCoSensor.py](sensors/SpecCoSensor.py)
 
 
 ### 3. Use your new class(es)

@@ -4,7 +4,7 @@ import json
 
 # Copyright Clinton Fernandes (clint.fernandes@gmail.com) 2021
 
-class SENSOR(metaclass=abc.ABCMeta):
+class Sensor(metaclass=abc.ABCMeta):
     @classmethod
     def __subclasshook__(cls, subclass):
         return (hasattr(subclass, 'connect_to_sensor') and
@@ -21,7 +21,8 @@ class SENSOR(metaclass=abc.ABCMeta):
     def get_raw_data(self) -> bytes:
         raise NotImplementedError
 
-    def print_formatted_data(self, data: dict):
+    @staticmethod
+    def print_formatted_data(data: dict):
         f"""
         Outputs formatted sensor data as a JSON.
         

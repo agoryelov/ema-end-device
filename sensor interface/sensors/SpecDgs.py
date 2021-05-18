@@ -1,5 +1,6 @@
 import serial
-from sensors import SENSOR
+from sensors import Sensor
+from sensors.SensorException import SensorReadError
 from unit_conversion import celsius_to_kelvin
 
 # Copyright Clinton Fernandes (clint.fernandes@gmail.com) 2021
@@ -19,7 +20,7 @@ DATA_INDICES = {
 }
 
 
-class SPEC_DGS(SENSOR):
+class SpecDgs(Sensor):
     """
         Credit for connect_to_sensor and get_raw_data goes to
         Noah MacRitchie (noah21mac@gmail.com) and Andrey Goryelov (andrey.goryelov@gmail.com)
@@ -54,11 +55,14 @@ class SPEC_DGS(SENSOR):
         return line
 
     def take_reading(self):
-        f"""
-        Formats sensor raw data into just numeric values.
+        """
+        Decodes a raw data reading into a list.
         """
 
         self.__reading = tuple(self.get_raw_data().decode().split(","))
+
+        if len(self.__reading) is not 11:
+            raise SensorReadError("Error getting sensor reading")
 
     def get_uid(self):
         return self.__uid

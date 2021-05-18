@@ -1,7 +1,7 @@
 import abc
 
 
-class SENSOR_DATA_FORMATTER(metaclass=abc.ABCMeta):
+class SensorDataFormatter(metaclass=abc.ABCMeta):
     @classmethod
     def __subclasshook__(cls, subclass):
         return (hasattr(subclass, 'format_data') and

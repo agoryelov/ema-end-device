@@ -1,4 +1,5 @@
-from sensors import SPEC_CO_SENSOR
+from sensors import SpecCoSensor
+from sensors import SensorReadError
 
 # Copyright Clinton Fernandes (clint.fernandes@gmail.com) 2021
 
@@ -11,8 +12,13 @@ UUID = 5000
 
 
 def main():
-    co = SPEC_CO_SENSOR(UUID, DEVICE, TIMEOUT, BAUD_RATE)
-    co.take_reading()
+    co = SpecCoSensor(UUID, DEVICE, TIMEOUT, BAUD_RATE)
+
+    try:
+        co.take_reading()
+    except SensorReadError:
+        co.print_formatted_data({"error": "sensor error"})
+        exit(0)
 
     reading_data = co.format_data()
     co.print_formatted_data(reading_data)
