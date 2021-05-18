@@ -17,10 +17,10 @@ def main():
     try:
         co.take_reading()
     except SensorReadError:
-        co.print_formatted_data({"error": "sensor error"})
-        exit(0)
+        reading_data = {"error": "sensor error"}
+    else:
+        reading_data = co.format_data()
 
-    reading_data = co.format_data()
     co.print_formatted_data(reading_data)
 
 
