@@ -72,6 +72,14 @@ Example: [SpecCoSensor.py](sensors/SpecCoSensor.py)
 
 Example: [co_sensor.py](./examples/co_sensor.py)
 
+## Known issues
+
+### SPEC DGS
+
+1. SPEC DGS sensors take a timeout property to read from. If the timeout is set insufficiently then a reading will return malformed data.
+A SensorReadError will be thrown in this case and final output will be an error message
+
+
 ## Related topics
 
 ### Units
