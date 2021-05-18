@@ -8,6 +8,15 @@ This repo consists of an interface to define enviromental sensors so that consis
 
 In the examples folder is found a full implementation to a sensor: see examples/co_sensor.py.
 
+## Installation
+
+If pulling directly from the repo the package folders must be present in the same folder as sensor implementations.
+In the directory structure present in the repo, this means that sensors/ and unit_conversion/ must be brought into examples/.
+
+On a *ix system this is mostly easily done via symlinks. On Windows..... I dunno.
+
+(May 2021): A future goal is to have the packages in pypi or something similar so that they can be imported in the same fashion.
+
 ## Using the interface
 
 We have defined 3 levels in our hierarchy:
