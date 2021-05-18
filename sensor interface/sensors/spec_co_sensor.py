@@ -1,12 +1,12 @@
-from sensors.spec_dgs import spec_dgs
-from sensors.sensor_data_formatter import sensor_data_formatter
+from sensors.spec_dgs import SPEC_DGS
+from sensors.sensor_data_formatter import SENSOR_DATA_FORMATTER
 from unit_conversion import ppb_to_ppm
 
 
 # Copyright Clinton Fernandes (clint.fernandes@gmail.com) 2021
 
 
-class spec_co_sensor(spec_dgs, sensor_data_formatter):
+class SPEC_CO_SENSOR(SPEC_DGS, SENSOR_DATA_FORMATTER):
     def __init__(self, uid: int, device: str, timeout: int, baud_rate: int):
         super().__init__(uid, device, timeout, baud_rate)
 

@@ -1,4 +1,4 @@
-from sensors import spec_co_sensor
+from sensors import SPEC_CO_SENSOR
 
 # Copyright Clinton Fernandes (clint.fernandes@gmail.com) 2021
 
@@ -11,7 +11,7 @@ UUID = 5000
 
 
 def main():
-    co = spec_co_sensor(UUID, DEVICE, TIMEOUT, BAUD_RATE)
+    co = SPEC_CO_SENSOR(UUID, DEVICE, TIMEOUT, BAUD_RATE)
     co.take_reading()
 
     reading_data = co.format_data()

@@ -1,5 +1,5 @@
 import serial
-from sensors import sensor
+from sensors import SENSOR
 from unit_conversion import celsius_to_kelvin
 
 # Copyright Clinton Fernandes (clint.fernandes@gmail.com) 2021
@@ -19,7 +19,7 @@ DATA_INDICES = {
 }
 
 
-class spec_dgs(sensor):
+class SPEC_DGS(SENSOR):
     """
         Credit for connect_to_sensor and get_raw_data goes to
         Noah MacRitchie (noah21mac@gmail.com) and Andrey Goryelov (andrey.goryelov@gmail.com)
