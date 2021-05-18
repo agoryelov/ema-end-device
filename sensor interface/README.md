@@ -68,6 +68,10 @@ This class extends the manufacturer class & must implement [sensor_data_formatte
 Example: [spec_co_sensor.py](./sensors/spec_co_sensor.py)
 
 
+### 3. Use your new class(es)
+
+Example: [co_sensor](./examples/co_sensor.py)
+
 ## Related topics
 
 ### Units
