@@ -1,21 +1,21 @@
 # Sensor interface
-Copyright: Clinton Fernandes (2021)
+Copyright: Clinton Fernandes (May 2021)
 
 
 A part of the BCIT Centre for Applied Research and Innovation EMA project.
 
 This repo consists of an interface to define enviromental sensors so that consistency of output can be provided for downstream portions of the application.
 
-In the examples folder is found a full implementation to a sensor: see examples/co_sensor.py.
+In the examples folder is found a full implementation to a sensor: see [examples/co_sensor.py](./examples/co_sensor.py)
 
 ## Installation
 
 If pulling directly from the repo the package folders must be present in the same folder as sensor implementations.
 In the directory structure present in the repo, this means that sensors/ and unit_conversion/ must be brought into examples/.
 
-On a *ix system this is mostly easily done via symlinks. On Windows..... I dunno.
+On a *ix system this is mostly easily done via symlinks. On Windows the files must be copied into the working directory.
 
-(May 2021): A future goal is to have the packages in pypi or something similar so that they can be imported in the same fashion.
+(May 2021): A future goal is to have the packages in pypi or something similar so that they can be installed in the same place as other imported packages.
 
 ## Using the interface
 
@@ -28,23 +28,25 @@ e.g. SPEC (sensor manufacturer) produces the [CO](https://www.digikey.ca/en/prod
 
 ### Sensors
 
-SensorInterface (actually an abstract class) defines two methods to implement: connect_to_sensor() and get_raw_data()
+sensor.py (an abstract base class) defines two methods to implement: connect_to_sensor() and get_raw_data()
 
 **Note**: "raw data" is arbitrarily defined as the "first accessible" data from a sensor.
-e.g. for a SPEC-DGS sensor that is accomplished by serial.readline() (see spec_dgs.py) and this puts out a host of information which may or may not be important.
+e.g. for a SPEC-DGS sensor that is accomplished by serial.readline() (see [spec_dgs.py](./sensors/spec_dgs.py)) and this puts out a host of information which may or may not be important.
 By contrast, a DHT-22 sensor, when accessed via tha [AdaFruit library](https://pypi.org/project/adafruit-io/ "Adafuit python library"), outputs data that you are most likely directly interested in. i.e. the "raw data" is the processed data.
 
-SensorInterface.print_formatted_data() implements a method that should be called by any sensor model to standardize output. It accepts a parameter supplied by format_data() (See Sensor manufacturers).
+sensor.print_formatted_data() implements a method that should be called by any sensor model to standardize output. It accepts a parameter supplied by format_data() (See [Sensor manufacturers](#sensor-manufacturers)).
 
 ### Sensor manufacturers
 
-Each Sensor manufacturer should define an abstract method, format_data(). A sensor model must implement that method to format data in an agreed-upon format.
-
-Note measurements should be expressed in SI units, so perform conversions at this level. See more [here](#units)
+**Note**: measurements should be expressed in SI units, so perform conversions in this implementation.
+A class has been defined for this purpose; see [here](#units)
 
 ### Sensor model
 
-Here you define any model-specific behaviour. For SPEC-DGS sensors this involves implementing format_data() (to be read by SensorInterface.print_formatted_data()
+Here you define any model-specific behaviour. For SPEC-DGS sensors this involves implementing format_data() (to be supplied to sensor.print_formatted_data()
+
+Each Sensor manufacturer must implement [sensor_data_formatter.format_data()](./sensors/sensor_data_formatter.py) to format data in a consistent format.
+
 
 ## Adding a new sensor to the system
 
@@ -53,16 +55,16 @@ If the manufacturer class has already been created then only [sensor class imple
 
 ### 1. Implement a manufacturer class
 
-This class must do two things
-1. implement SensorInterface.py
+This class must do two things (other properties/behaviours can be defined according to need):
+1. implement [SensorInterface.py](sensors/sensor.py)
 
-See spec_dgs.py for an example
+Example: [spec_dgs.py](./sensors/spec_dgs.py)
 
 ### 2. Implement the sensor class
 
-This class extends the manufacturer class & must implement sensor_data_formatter.py
+This class extends the manufacturer class & must implement [sensor_data_formatter.py](./sensors/sensor_data_formatter.py)
 
-See spec_co_sensor.py for an example.
+Example: [spec_co_sensor.py](./sensors/spec_co_sensor.py)
 
 
 ## Related topics
@@ -71,6 +73,6 @@ See spec_co_sensor.py for an example.
 
 All measurements should be expressed in [SI units](https://en.wikipedia.org/wiki/International_System_of_Units). However, dimensionless quantities, like ppm (parts per million) are not SI and have no SI definition. For consistency, we've decided to standardize to ppm.
 
-The included package, unit_conversion, provides convenient conversions. It is not exhaustive and should be updated as and when a conversion is needed. A different conversion package can be used if desired.
+The included package, [unit_conversion](./unit_conversion), provides a convenient, though non-exhautive library. It should be updated as and when a conversion is needed. A different conversion package can be used if desired.
 
 Future updates will have the unit_conversion package external. But there's no telling when that will occur.

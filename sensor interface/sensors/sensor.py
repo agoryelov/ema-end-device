@@ -4,7 +4,7 @@ import json
 
 # Copyright Clinton Fernandes (clint.fernandes@gmail.com) 2021
 
-class SensorInterface(metaclass=abc.ABCMeta):
+class sensor(metaclass=abc.ABCMeta):
     @classmethod
     def __subclasshook__(cls, subclass):
         return (hasattr(subclass, 'connect_to_sensor') and
