@@ -15,7 +15,7 @@ In the directory structure present in the repo, this means that sensors/ and uni
 
 On a *ix system this is mostly easily done via symlinks. On Windows the files must be copied into the working directory.
 
-(May 2021): A future goal is to have the packages in pypi or something similar so that they can be installed in the same place as other imported packages.
+(May 2021): A future goal is to have the packages in pypi or something similar so that they can be installed in the same place as other imported packages (sys.path).
 
 ## Using the interface (overview)
 
