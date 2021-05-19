@@ -4,6 +4,8 @@ import Adafruit_DHT
 # GPIO lib
 import RPi.GPIO as GPIO           # import RPi.GPIO module
 
+from sensors.SensorException import SensorReadError
+
 
 # SensorInterface(Top Hierarchy)
 # Author     : clintonbf
@@ -59,8 +61,11 @@ class Dht(Sensor):
 
     # Take reading from the sensor
     # (with retry, it's garunteed to get an output with up to 15 trials )
-    def take_reading(self) -> int:     
-        self.__reading = Adafruit_DHT.read_retry(self.__model, self.__gpio_in)
+    def take_reading(self) -> int:
+        try:
+            self.__reading = Adafruit_DHT.read_retry(self.__model, self.__gpio_in)
+        except:
+            raise SensorReadError("cannot get a reading after 15 trials, please check wiring")
 
 
     # TODO: necessary?
@@ -70,13 +75,24 @@ class Dht(Sensor):
         temp, humidity = Adafruit_DHT.read_retry(self.__model, DHT_in)
 
     def get_temperature(self) -> float:
+        temperature_reading = 0.00
+        try:
+             temperature_reading = celsius_to_kelvin(self.__reading[DATA_INDICES['temperature']])
+        except:
+            raise SensorReadError("cannot get a reading after 15 trials, please check wiring and sensor model")
         # return celsius_to_kelvin(float(Adafruit_DHT.read_retry(self.__model,self.__gpio_in)[1]))
-        return celsius_to_kelvin(self.__reading[DATA_INDICES['temperature']])
+        return temperature_reading
 
     # grab from self._reading, 
     # then take the field from the right index
     def get_relative_humidity(self) -> float:
-        return self.__reading[DATA_INDICES['relative_humidity']]
+        relative_humidity_reading =  0.00
+        try :
+            relative_humidity_reading = self.__reading[DATA_INDICES['relative_humidity']]
+        except:
+            raise SensorReadError("cannot get a reading after 15 trials, please check wiring and sensor model")
+        
+        return relative_humidity_reading
     
    
 

@@ -3,7 +3,7 @@ from sensors import Dht22
 
 # uid: int, gpio_in: int, timeout : int, model : str 
 
-GPIO_IN = 4 # DHT22 gpio data in
+GPIO_IN = 5 # DHT22 gpio data in
 MODEL = 'DHT22' # Not needed
 UUID = 5001 # Some random fake uuid
 
