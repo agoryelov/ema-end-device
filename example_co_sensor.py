@@ -1,5 +1,5 @@
-from sensors import SpecCoSensor
-from sensors import SensorReadError
+from sensors.SpecCoSensor import SpecCoSensor
+from sensors.SensorException import SensorReadError
 
 # Copyright Clinton Fernandes (clint.fernandes@gmail.com) 2021
 
