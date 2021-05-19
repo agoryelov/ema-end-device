@@ -1,4 +1,3 @@
-
-from .SensorInterface import SensorInterface
-from .dht import dht
-from .dht22 import dht22
+from .Sensor import Sensor
+from .Dht import Dht
+from .Dht22 import Dht22

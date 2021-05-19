@@ -1,7 +1,10 @@
 import abc
+import json
 
 
-class SensorInterface(metaclass=abc.ABCMeta):
+# Copyright Clinton Fernandes (clint.fernandes@gmail.com) 2021
+
+class Sensor(metaclass=abc.ABCMeta):
     @classmethod
     def __subclasshook__(cls, subclass):
         return (hasattr(subclass, 'connect_to_port') and
@@ -18,6 +21,16 @@ class SensorInterface(metaclass=abc.ABCMeta):
     def get_raw_data(self) -> bytes:
         raise NotImplementedError
 
-    def print_formatted_data(self, data: dict):
-        for (key) in data:
-            print(key, ":", data[key])
+    @staticmethod
+    def print_formatted_data(data: dict):
+        f"""
+        Outputs formatted sensor data as a JSON.
+        
+        :param data: {dict} 
+        """
+        
+        json_data = json.dumps(data)
+
+        print(json_data)
+
+

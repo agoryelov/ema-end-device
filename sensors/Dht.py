@@ -1,5 +1,5 @@
 # inheritance library
-import abc
+# import abc
 import Adafruit_DHT
 # GPIO lib
 import RPi.GPIO as GPIO           # import RPi.GPIO module
@@ -8,7 +8,7 @@ import RPi.GPIO as GPIO           # import RPi.GPIO module
 # SensorInterface(Top Hierarchy)
 # Author     : clintonbf
 # Repository :   https://github.com/clintonbf/sensor_interface/blob/master/sensors/SensorInterface.py
-from sensors import SensorInterface
+from sensors import Sensor
 
 # unit conversion function
 # Author     : clintonbf
@@ -20,7 +20,7 @@ DATA_INDICES = {
         "temperature": 1,
     }
 
-class dht(SensorInterface, metaclass=abc.ABCMeta):
+class Dht(Sensor):
     """
         Credit for connect_to_port and get_raw_data goes to
         Noah MacRitchie (noah21mac@gmail.com) and Andrey Goryelov (andrey.goryelov@gmail.com)
@@ -79,10 +79,4 @@ class dht(SensorInterface, metaclass=abc.ABCMeta):
         return self.__reading[DATA_INDICES['relative_humidity']]
     
    
-    def format_data(self) -> dict :
-        readings = {
-            "uid": self.get_uid(),
-            "temperature ": str(self.get_temperature()) +  " K",
-            "relative_humidity": str(self.get_relative_humidity()) + " %",
-        }
-        return readings
+

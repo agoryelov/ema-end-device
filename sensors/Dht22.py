@@ -1,6 +1,4 @@
-# inheritance library
-import abc
-from sensors import dht 
+
 # installed Adafruit_DHT lib
 import Adafruit_DHT
 
@@ -11,18 +9,20 @@ import RPi.GPIO as GPIO           # import RPi.GPIO module
 # SensorInterface(Top Hierarchy)
 # Author : clintonbf
 # https://github.com/clintonbf/sensor_interface/blob/master/sensors/SensorInterface.py
-from sensors import SensorInterface
+from sensors.Dht import Dht
 
 # unit conversion function
 # Author : clintonbf
 # https://github.com/clintonbf/sensor_interface/tree/master/unit_conversion
 from unit_conversion import celsius_to_kelvin
 
+from sensors.SensorDataFormatter import SensorDataFormatter
 
 
 
 
-class dht22(dht):
+
+class Dht22(Dht, SensorDataFormatter):
     """
         Credit for connect_to_port and get_raw_data goes to
         Noah MacRitchie (noah21mac@gmail.com) and Andrey Goryelov (andrey.goryelov@gmail.com)
@@ -32,13 +32,10 @@ class dht22(dht):
         super().__init__(uid,gpio_in,model)
         self.__uid = uid
         self.__gpio_in = gpio_in
-        if model.lower() == 'dht11':
-            self.__model = 11
-        # elif model.lower() == 'am2302':
-        #     self.__model = 22
-        else:
-            self.__model = 22
-        self.__reading = () # TODO meaning?
+        
+        # DHT22:
+        self.__model = 22
+        self.__reading = ()
 
 
 
@@ -72,3 +69,12 @@ class dht22(dht):
     # def get_raw_data(self) -> bytes:
     def get_uid(self):
         return self.__uid
+    
+    
+    def format_data(self) -> dict :
+        readings = {
+            "uid": self.get_uid(),
+            "temperature ": str(self.get_temperature()) +  " K",
+            "relative_humidity": str(self.get_relative_humidity()) + " %",
+        }
+        return readings
