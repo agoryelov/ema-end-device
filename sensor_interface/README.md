@@ -7,11 +7,11 @@ A part of the BCIT Centre for Applied Research and Innovation EMA project.
 This repo consists of an interface to define enviromental sensors so that consistency of output can be provided for 
 downstream portions of the application.
 
-In the examples folder is found a full implementation to a sensor: see [examples/co_sensor.py](./examples/co_sensor.py)
+In the examples folder is found a full implementation to a sensor: see [examples/co_sensor.py](../co_sensor.py)
 
 ## Installation
 
-If pulling directly from the repo the package folders must be present in the same folder as sensor implementations.
+If pulling directly from the repo the package folders must be present *in the same folder* as sensor implementations.
 In the directory structure present in the repo, this means that sensors/ and unit_conversion/ must be brought 
 into examples/.
 
@@ -83,7 +83,7 @@ Example: [SpecCoSensor.py](sensors/SpecCoSensor.py)
 
 ### 3. Use your new class(es)
 
-Example: [co_sensor.py](./examples/co_sensor.py)
+Example: [co_sensor.py](../co_sensor.py)
 
 ## Known issues
 
@@ -104,9 +104,13 @@ The first time the script is run it results in a sensor read error. Subsequent e
 * "first time" can mean
   * the first run after booting
   * the sensor has been removed and re-inserted
-* "subsequent" can be up to 10 minutes (beyond that hasn't been tested)
+* "subsequent" can be up to 30 minutes (beyond that hasn't been tested)
 
 ## Related topics
+
+### Python version
+
+This portion of the project was designed and tested using Python v3.7.3
 
 ### Units
 
