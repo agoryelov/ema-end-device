@@ -5,6 +5,7 @@ import Adafruit_DHT
 import RPi.GPIO as GPIO           # import RPi.GPIO module
 
 from sensors.SensorException import SensorReadError
+from sensors.SensorException import SensorUnitConversionError
 
 
 # SensorInterface(Top Hierarchy)
@@ -67,8 +68,11 @@ class Dht(Sensor):
     def take_reading(self) -> int:
         try:
             self.__reading = Adafruit_DHT.read_retry(self.__model, self.__gpio_in)
+            #
+            if(self.__reading[0] == None or self.__reading[1] == None):
+                raise SensorError("Please check wiring")
         except:
-            raise SensorReadError("cannot get a reading after 15 trials, please check wiring")
+            raise SensorReadError("Please check wiring")
 
 
     # TODO: necessary?
@@ -82,8 +86,7 @@ class Dht(Sensor):
         try:
              temperature_reading = celsius_to_kelvin(self.__reading[DATA_INDICES['temperature']])
         except:
-            raise SensorReadError("cannot get a reading after 15 trials, please check wiring and sensor model")
-        # return celsius_to_kelvin(float(Adafruit_DHT.read_retry(self.__model,self.__gpio_in)[1]))
+            raise SensorUnitConversionError("Cannot conver from Celsius to Kelvin, check input!")
         return temperature_reading
 
     # grab from self._reading, 
@@ -93,7 +96,7 @@ class Dht(Sensor):
         try :
             relative_humidity_reading = self.__reading[DATA_INDICES['relative_humidity']]
         except:
-            raise SensorReadError("cannot get a reading after 15 trials, please check wiring and sensor model")
+            raise SensorUnitConversionError("Cannot conver from Celsius to Kelvin, check input!")
         
         return relative_humidity_reading
     
