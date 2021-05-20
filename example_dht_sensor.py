@@ -14,7 +14,9 @@ def main():
     try:
         dht22_obj.take_reading()
     except SensorReadError:
-        sensor_readings = {"error": "sensor error"}
+        sensor_readings = {"error": "sensor error", "suggestions" : "check wiring" }
+    except SensorUnitConversionError:
+        sensor_readings = {"error": "sensor error", "suggestions" : "check original readings" }
     else:
         sensor_readings = dht22_obj.format_data()
         
