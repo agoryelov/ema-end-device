@@ -1,3 +1,4 @@
+from collections import OrderedDict
 from sensors.Sensor import Sensor
 from utils.config_loader import DeviceConfig
 from utils.driver_loader import load_sensor_driver
@@ -9,7 +10,7 @@ def main():
     
     selected_sensors = device_config.get_sensors()
     
-    loaded_drivers = dict()
+    loaded_drivers = OrderedDict()
     for sensor in selected_sensors:
         sensor_name, sensor_path = sensor['name'], sensor['path']
 
