@@ -41,7 +41,7 @@ class Dht22(Dht, SensorDataFormatter):
 
 
     # Sets the GPIO to be in input mode
-    def connect_to_sensor(self) -> int:
+    def connect_to_sensor(self):
         DHT_in = self.__gpio_in
         # TODO error checking?
         GPIO.setmode(GPIO.BCM)                 # choose BCM or BOARD
@@ -74,7 +74,7 @@ class Dht22(Dht, SensorDataFormatter):
     def format_data(self) -> dict :
         readings = {
             "uid": self.get_uid(),
-            "temperature ": str(self.get_temperature()) +  " K",
-            "relative_humidity": str(self.get_relative_humidity()) + " %",
+            "temperature ": self.get_temperature(),
+            "relative_humidity": self.get_relative_humidity(),
         }
         return readings

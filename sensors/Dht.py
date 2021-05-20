@@ -43,7 +43,7 @@ class Dht(Sensor):
         #     self.__model = 22
         else:
             self.__model = 22
-        self.__reading = () # TODO meaning?
+        self.__reading = () 
 
     @classmethod
     def __subclasshook__(cls, subclass):
@@ -52,11 +52,14 @@ class Dht(Sensor):
                NotImplemented)
 
     # Sets the GPIO to be in input mode
-    def connect_to_sensor(self) -> int:
+    def connect_to_sensor(self):
         DHT_in = self.__gpio_in
-        # TODO return a value for error checking?
-        GPIO.setmode(GPIO.BCM)                 # choose BCM or BOARD
-        status = GPIO.setup(DHT_in, GPIO.IN)  # set a port/pin as an input
+        GPIO.setmode(GPIO.BCM)                # choose BCM or BOARD
+        try:
+            status = GPIO.setup(DHT_in, GPIO.IN)  # set a port/pin as an input
+        except:
+            raise SensorError("Connection failed, please check wiring")
+            
         return status
 
     # Take reading from the sensor

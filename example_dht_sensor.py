@@ -10,11 +10,11 @@ UUID = 5001 # Some random fake uuid
 
 def main():
     dht22_obj = Dht22(UUID, GPIO_IN, MODEL)
+    dht22_obj.connect_to_sensor()
     try:
-        dht22_obj.connect_to_sensor()
         dht22_obj.take_reading()
     except SensorReadError:
-        reading_data = {"error": "sensor error"}
+        sensor_readings = {"error": "sensor error"}
     else:
         sensor_readings = dht22_obj.format_data()
         
