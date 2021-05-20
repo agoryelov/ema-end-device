@@ -26,7 +26,7 @@ def main():
         sensor_driver : Sensor = loaded_drivers[driver_name]
         sensor_driver.connect_to_sensor()
         reading = sensor_driver.get_raw_data()
-        print(f"Taking reading from {driver_name}: {reading}")
+        print(f"Taking raw reading from {driver_name}: {reading}")
 
 if __name__ == "__main__":
     main()

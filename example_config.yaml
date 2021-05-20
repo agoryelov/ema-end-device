@@ -13,21 +13,21 @@ transmission_rate: 60
 # The order of the readings in a message will be the top down order of 
 # all of the "values" in this file.
 sensors:
-  - 0:
-    # The path is the sensor path, the end device can read 
-    # and write to it in order to communicate with the sensor
-    name: "SpecNo2Sensor"
-    path: "/dev/ttyUSB0"
-    # values contain all the different attributes a sensor captures.
-    # The value of each attribute is the number of bytes the device 
-    # will use to send the reading. 
-    values:
-      - temp: 4
-      - hum: 0
-      - no2: 2
+  # - 0:
+  #   # The path is the sensor path, the end device can read 
+  #   # and write to it in order to communicate with the sensor
+  #   name: "SpecNo2Sensor"
+  #   path: "/dev/ttyUSB0"
+  #   # values contain all the different attributes a sensor captures.
+  #   # The value of each attribute is the number of bytes the device 
+  #   # will use to send the reading. 
+  #   values:
+  #     - temp: 4
+  #     - hum: 0
+  #     - no2: 2
   - 1:
     name: "SpecCoSensor"
-    path: "/dev/ttyUSB1"
+    path: "/dev/ttyUSB0"
     values: 
       - temp: 0
       - hum: 4
