@@ -1,8 +1,8 @@
 import serial
 from serial import SerialException
-from sensors import Sensor
+from sensors.Sensor import Sensor
 from sensors.SensorException import SensorReadError
-from unit_conversion import celsius_to_kelvin
+from utils.unit_conversion.temperature import celsius_to_kelvin
 
 # Copyright Clinton Fernandes (clint.fernandes@gmail.com) 2021
 
