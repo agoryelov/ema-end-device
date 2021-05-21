@@ -2,11 +2,11 @@ from sensors.SpecDgs import SpecDgs
 from sensors.SensorDataFormatter import SensorDataFormatter
 from utils.unit_conversion.concentrations import ppb_to_ppm
 
-
 # Copyright Clinton Fernandes (clint.fernandes@gmail.com) 2021
 
 TIMEOUT = 3
 BAUD_RATE = 9600
+
 
 class SpecCoSensor(SpecDgs, SensorDataFormatter):
     def __init__(self, uid: int, device: str, timeout: int = TIMEOUT, baud_rate: int = BAUD_RATE):
