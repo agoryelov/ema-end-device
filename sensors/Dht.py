@@ -5,7 +5,7 @@ import Adafruit_DHT
 import RPi.GPIO as GPIO           # import RPi.GPIO module
 
 from sensors.SensorException import SensorReadError
-from sensors.SensorException import SensorUnitConversionError
+from utils.unit_conversion.ConversionException import SensorUnitConversionError
 
 
 # SensorInterface(Top Hierarchy)
