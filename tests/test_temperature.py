@@ -1,5 +1,6 @@
 from unittest import TestCase
-import temperature
+from utils.unit_conversion.temperature import *
+
 
 class Test(TestCase):
     def test_celsius_to_kelvin(self):
@@ -13,4 +14,3 @@ class Test(TestCase):
         kelvin_temp = 373.15
 
         self.assertEqual(fahrenheit_to_kelvin(fahrenheit_temp), kelvin_temp)
-
