@@ -16,7 +16,7 @@ class SpecCoSensor(SpecDgs, SensorDataFormatter):
         reading = {
             "uid": self.get_uid(),
             "serial_number": self.get_serial_number(),
-            "carbon_monoxide": ppb_to_ppm(self.get_measurement()),
+            "CO": ppb_to_ppm(self.get_measurement()),
             "temperature": self.get_temperature(),
             "relative_humidity": self.get_relative_humidity(),
         }
