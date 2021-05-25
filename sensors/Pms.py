@@ -23,6 +23,7 @@ from sensors.Sensor import Sensor
 from utils.unit_conversion.concentrations import μgm3_to_gpl
 from utils.unit_conversion.concentrations import pms_gt_output_to_si
 
+
 DATA_INDICES = {
     "PM1.0": 0,
     "PM2.5": 1,
@@ -36,7 +37,7 @@ DATA_INDICES = {
     "gt10μm" : 11,
     }
 
-
+# Start of file flag
 PMS5003_SOF = bytearray(b'\x42\x4d')
 
 
@@ -144,32 +145,32 @@ class Pms(Sensor):
     
     
 
-	# Get raw data
+    # Get raw data
     def get_raw_data(self)-> float:
         
         ser = self.connect_to_sensor()
         
         start = time.time()
 
-        sof_index = 0
+        start_of_file_index = 0
 
         while True:
             elapsed = time.time() - start
             if elapsed > 5:
                 raise ReadTimeoutError("PMS5003 Read Timeout: Could not find start of frame")
 
-            sof = ser.read(1)
-            if len(sof) == 0:
+            start_of_file = ser.read(1)
+            if len(start_of_file) == 0:
                 raise SerialTimeoutError("PMS5003 Read Timeout: Failed to read start of frame byte")
-            sof = ord(sof) if type(sof) is bytes else sof
+            start_of_file = ord(start_of_file) if type(start_of_file) is bytes else start_of_file
 
-            if sof == PMS5003_SOF[sof_index]:
-                if sof_index == 0:
-                    sof_index = 1
-                elif sof_index == 1:
+            if start_of_file == PMS5003_SOF[start_of_file_index]:
+                if start_of_file_index == 0:
+                    start_of_file_index = 1
+                elif start_of_file_index == 1:
                     break
             else:
-                sof_index = 0
+                start_of_file_index = 0
 
         checksum = sum(PMS5003_SOF)
 
@@ -180,19 +181,13 @@ class Pms(Sensor):
         frame_length = struct.unpack(">H", data)[0]
 
         raw_data = bytearray(ser.read(frame_length))
-        print("frame_length:",frame_length)
-    
-
+  
         if len(raw_data) != frame_length:
             raise SerialTimeoutError("PMS5003 Read Timeout: Invalid frame length. Got {} bytes, expected {}.".format(len(raw_data), frame_length))
 
-
         return raw_data
 
-    # Take reading from the sensor
-    # (with retry, it's garunteed to get an output with up to 15 trials )
     def take_reading(self) -> int:
-        print("take_reading()")
         print(self.get_raw_data())
         try:
             self.__reading =  struct.unpack(">HHHHHHHHHHHHHH", self.get_raw_data())
@@ -218,17 +213,3 @@ class Pms(Sensor):
             '> 10 um/L' :  self.get_gt_10(),
         }
         return reading
-        
-
-#PM1.0 ug/m3 (ultrafine particles):                             {}
-#PM2.5 ug/m3 (combustion particles, organic compounds, metals): {}
-#PM10 ug/m3  (dust, pollen, mould spores):                      {}
-#PM1.0 ug/m3 (atmos env):                                       {}
-#PM2.5 ug/m3 (atmos env):                                       {}
-#PM10 ug/m3 (atmos env):                                        {}
-#>0.3um in 0.1L air:                                            {}
-#>0.5um in 0.1L air:                                            {}
-#>1.0um in 0.1L air:                                            {}
-#>2.5um in 0.1L air:                                            {}
-#>5.0um in 0.1L air:                                            {}
-#>10um in 0.1L air:                                             {}
