@@ -7,22 +7,15 @@ A part of the BCIT Centre for Applied Research and Innovation EMA project.
 This repo consists of an interface to define environmental sensors so that consistency of output can be provided for 
 downstream portions of the application.
 
-In the examples folder is found a full implementation to a sensor: see `co_sensor.py`
+ `example_co_sensor.py` is a full implementation of the sensor interface. 
 
 ## Installation
 
-If pulling directly from the repo the package folders must be present *in the same folder* as sensor implementations.
-In the directory structure present in the repo, this means that sensors/ and unit_conversion/ must be brought 
-into examples/.
-
-On a *ix system this is mostly easily done via symlinks. On Windows the files must be copied into the working directory.
-
-(May 2021): A future goal is to have the packages in pypi or something similar so that they can be installed in the same
-place as other imported packages (sys.path).
+Clone/fork repo.
 
 ## Using the interface (overview)
 
-We have defined 3 levels in our hierarchy:
+We have defined three levels in our design hierarchy:
 * Sensors
 * Sensor manufacturers
 * Sensor model
@@ -34,27 +27,63 @@ sensor (sensor model).
 
 `sensor.py` (an abstract base class) defines two methods to implement: `connect_to_sensor()` and `get_raw_data()`
 
+It implements one method: `sensors/sensor.print_formatted_data()`. It should be called by any sensor model to
+standardize output. It accepts a parameter supplied by `format_data()` (See [Sensor manufacturers](#sensor-manufacturers)).
+
+## `connect_to_sensor()` 
+
+This method connects to the hardware.
+
+## `get_raw_data()`
+
+This method gets raw data from the sensor hardware.
+
+***
 **Note**: "raw data" is arbitrarily defined as the "first accessible" data from a sensor.
-e.g. for a SPEC-DGS sensor that is accomplished by `serial.readline()` (see `SpecDgs.py`) and this 
+e.g. for a SPEC-DGS sensor that is accomplished by `serial.readline()` (see `sensors/SpecDgs.py`) and this 
 puts out a host of information which may or may not be important.
+
 By contrast, a DHT-22 sensor, when accessed via tha [AdaFruit library](https://pypi.org/project/adafruit-io/ "Adafuit python library"),
 outputs data that you are most likely directly interested in. i.e. the "raw data" is the processed data.
-
-`sensor.print_formatted_data()` implements a method that should be called by any sensor model to standardize output. 
-It accepts a parameter supplied by `format_data()` (See [Sensor manufacturers](#sensor-manufacturers)).
-
+***
 ### Sensor manufacturers
 
-**Note**: measurements should be expressed in SI units, so perform conversions in this implementation.
+Sensor manufacturers are the companies that put out different sensors. In our experience, all the sensors produced by
+a sensor manufacturer have the same method to interact with the hardware, same output format, etc. 
+As such, a sensor manufacturer can implement a lot of the logic to interact with a sensor. 
+
+e.g. 
+* SPEC
+* DHT
+* Sensirion
+
+**Note**: measurements should be expressed in SI units, so perform conversions here.
 A class has been defined for this purpose; see [here](#units)
+
+Manufacturers implement the Sensor interface.
+
+example: `sensors/SpecDgs.py`
 
 ### Sensor model
 
-Here you define any model-specific behaviour. For SPEC-DGS sensors this involves implementing format_data() 
-(to be supplied to `sensor.print_formatted_data()`
+Here you implement any model-specific behaviour.
 
-Each Sensor manufacturer must implement `SensorDataFormatter.format_data()` to format data in a consistent format.
+Each Sensor manufacturer must implement `sensors/SensorDataFormatter.format_data()`.
+Current implementations output data as a dictionary (`sensors/Sensor.print_formatted_data()` accepts a dictionary).  
+  
 
+For the purposes of consistency and precision, the following specifications are used for formatting outputs in `format_data()`:
+* measurement types
+  * use their full name e.g. 'temperature'
+  * use only lower case e.g. 'temperature'
+  * use underscores when joining words e.g. 'relative_humidity'
+ * chemicals
+  * use [condensed structural formula]('https://en.wikipedia.org/wiki/Structural_formula#Condensed_formulas') 
+    e.g. '(CH3)3CH' *not* 'C4H10'
+  * use their symbol as identified in the [periodic table of elements]('https://en.wikipedia.org/wiki/Periodic_table')
+    e.g. 'He' for Helium
+
+e.g. `sensors/SpecCoSensor.py`
 
 ## Adding a new sensor to the system
 
@@ -64,38 +93,34 @@ is necessary.
 
 ### 1. Implement a manufacturer class
 
-This class must implement `Sensor.py`. 
+This class must implement `sensors/Sensor.py`. 
 
 Other properties/behaviours can be defined according to need.
 
-Example: `SpecDgs.py`
+Example: `sensors/SpecDgs.py`
 
-### 2. Implement the sensor class
+### 2. Implement the sensor model class
 
-This class extends the manufacturer class & must implement SensorDataFormatter.py
+This class extends the manufacturer class & must implement `sensors/SensorDataFormatter.py`
 
-Unless you have a very good reason you should use `Sensor.print_formatted_data()` to output your data. This will keep
-things nice and consistent.
+Unless you have a very good reason you should use `sensors/Sensor.print_formatted_data()` to output your data. 
+This will keep things nice and consistent.
 
-Example: `SpecCoSensor.py`
-
+Example: `sensors/SpecCoSensor.py`
 
 ### 3. Use your new class(es)
 
-Example: `co_sensor.py`
+Example: `sensors/example_co_sensor.py`
 
 ## Known issues
 
 ### SPEC DGS
 
-SPEC DGS sensors take a timeout property to read from. If the timeout is set insufficiently then a reading will return 
+SPEC DGS sensors take a timeout property to read from. If the timeout is set insufficiently a reading will return 
 malformed data.
-A SensorReadError will be thrown in this case and final output will be an error message
+A SensorReadError will be thrown in this case and final output will be an error message.
 
-### Python package locations
-
-For reasons I don't understand (yet) the sensors/ and unit_conversion/ packages must be in the same directory as the
-harnessing script (`co_sensor.py` in the examples). See [Installation](#installation)
+This issue may have been resolved in later code updates but has not been extensively tested.
 
 ### First-time run
 
@@ -117,7 +142,7 @@ All measurements should be expressed in [SI units](https://en.wikipedia.org/wiki
 However, dimensionless quantities, like ppm (parts per million) are not SI and have no SI definition. For consistency, 
 we've decided to *standardize to ppm*.
 
-The included package, `unit_conversion`, provides a convenient, though non-exhaustive library. 
+The included package, `utils/unit_conversion`, provides a convenient, though non-exhaustive library. 
 It should be updated as and when a conversion is needed. A different conversion package can be used if desired.
 
 Future updates will have the unit_conversion package external. But there's no telling when that will occur.
