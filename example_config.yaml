@@ -14,6 +14,9 @@ communication_medium: "wifi"
 # Seconds between each message
 transmission_rate: 60
 
+# flag for keeping the connection open with edge device
+keep_alive: true
+
 # sensors contains a list of sensors that are connected to the device.
 # The order of the readings in a message will be the top down order of 
 # all of the "values" in this file.
