@@ -1,6 +1,8 @@
 import abc
 
 
+# Copyright Clinton Fernandes (clint.fernandes@gmail.com) 2021
+
 class SensorDataFormatter(metaclass=abc.ABCMeta):
     @classmethod
     def __subclasshook__(cls, subclass):

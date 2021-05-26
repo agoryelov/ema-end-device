@@ -1,3 +1,5 @@
+# Copyright Clinton Fernandes (clint.fernandes@gmail.com) 2021
+
 class SensorError(Exception):
     def __init__(self, message):
         self.__message = message
