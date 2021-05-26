@@ -2,7 +2,7 @@ from sensors.Sensor import Sensor
 from sensors.SpecCoSensor import SpecCoSensor
 
 sensor_mapping = {
-    "SpecCoSensor": SpecCoSensor
+    "spec_co_sensor": SpecCoSensor
 }
 
 def load_sensor_driver(sensor_name: str, device_path: str) -> Sensor:
