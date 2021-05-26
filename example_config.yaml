@@ -20,7 +20,7 @@ sensors:
   - 0:
     # The path is the sensor path, the end device can read 
     # and write to it in order to communicate with the sensor
-    name: "SpecNo2Sensor"
+    name: "spec_no2_sensor"
     path: "/dev/ttyUSB0"
     # values contain all the different attributes a sensor captures.
     # The value of each attribute is the number of bytes the device 
@@ -30,7 +30,7 @@ sensors:
       - humidity: 0
       - no2: 2
   - 1:
-    name: "SpecCoSensor"
+    name: "spec_co_sensor"
     path: "/dev/ttyUSB0"
     values: 
       - temperature: 0
