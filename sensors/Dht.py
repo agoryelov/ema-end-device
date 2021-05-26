@@ -46,11 +46,7 @@ class Dht(Sensor):
             self.__model = 22
         self.__reading = () 
 
-    @classmethod
-    def __subclasshook__(cls, subclass):
-        return(hasattr(subclass, 'format_data') and
-               callable(subclass.format_data) or
-               NotImplemented)
+
 
     # Sets the GPIO to be in input mode
     def connect_to_sensor(self):
