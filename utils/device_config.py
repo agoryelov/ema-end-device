@@ -45,22 +45,7 @@ def reading_to_bytes(driver_values: dict, config_values: list):
 
     reading = driver_values[name]
     reading_bytes = number_to_bytes(reading, data_type)
-    
-    print(reading_bytes)
-    print(len(reading_bytes))
 
     output.extend(reading_bytes)
 
   return(output)
-
-
-def main():
-  driver_values = { 'temperature': 21, 'humidity': 54, 'co': 553.2 }
-  config_values = [{'temperature': 'int'}, {'humidity': 'short'}, {'co': 'float'}]
-
-
-  reading_to_bytes(driver_values, config_values)
-
-
-if __name__ == '__main__':
-  main()
