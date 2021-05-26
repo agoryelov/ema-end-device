@@ -4,8 +4,9 @@ device_id: "uid8933674632"
 
 access_point_ssid: "127.80.034"
 access_point_password: "example_password"
-ip_edge_device: "127.90.034"
-port_edge_device: "8080"
+
+edge_device_ip: "127.90.034"
+edge_device_port: "8080"
 
 # The communication medium can be either bluetooth or wifi
 communication_medium: "wifi"
