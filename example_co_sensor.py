@@ -6,6 +6,7 @@ from sensors.SensorException import SensorReadError
 DEVICE = '/dev/ttyUSB0'
 UUID = 5000
 
+
 def main():
     co = SpecCoSensor(UUID, DEVICE)
 
@@ -17,6 +18,7 @@ def main():
         reading_data = co.format_data()
 
     co.print_formatted_data(reading_data)
+
 
 if __name__ == '__main__':
     main()
