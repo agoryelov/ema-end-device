@@ -24,15 +24,15 @@ class DeviceConfig:
 
 def number_to_bytes(number, data_type) -> bytearray:
   if data_type == 'int':
-    return number.to_bytes(4, byteorder='big', signed=True)
+    return int(number).to_bytes(4, byteorder='big', signed=True)
   elif data_type == 'short':
-    return number.to_bytes(2, byteorder='big', signed=True)
+    return int(number).to_bytes(2, byteorder='big', signed=True)
   elif data_type == 'byte':
-    return number.to_bytes(1, byteorder='big', signed=True)
+    return int(number).to_bytes(1, byteorder='big', signed=True)
   elif data_type == 'float':
-    return bytearray(struct.pack("f", number))
+    return bytearray(struct.pack("f", float(number)))
   elif data_type == 'double':
-    return bytearray(struct.pack("d", number))
+    return bytearray(struct.pack("d", float(number)))
   else:
     return bytearray()
 

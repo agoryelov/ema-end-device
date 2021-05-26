@@ -28,7 +28,6 @@ def main():
     for driver_name in loaded_drivers:
         sensor_driver : Sensor = loaded_drivers[driver_name]
         sensor_driver.connect_to_sensor()
-
         driver_values = sensor_driver.get_data()
         config_values = device_config.get_values(sensor_name)
         print(f"Taking raw reading from {driver_name}: {driver_values}")

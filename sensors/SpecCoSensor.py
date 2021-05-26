@@ -24,6 +24,7 @@ class SpecCoSensor(SpecDgs, SensorDataFormatter):
         return reading
     
     def get_data(self) -> dict:
+        self.take_reading()
         reading_dict = {
             "uid": self.get_uid(),
             "serial_number": self.get_serial_number(),
