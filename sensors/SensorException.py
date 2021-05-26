@@ -24,3 +24,15 @@ class SensorReadError(SensorError):
     def get_message(self):
         return self.__message
 
+# Raised when failed to convert 
+class SensorUnitConversionError(SensorError):
+    def __init__(self,message):
+        pass
+    @property
+    def message(self):
+        return self.__message
+    def get_message(self):
+        return self.__message
+
+
+
