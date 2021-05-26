@@ -9,6 +9,8 @@ class Sensor(metaclass=abc.ABCMeta):
     def __subclasshook__(cls, subclass):
         return (hasattr(subclass, 'connect_to_sensor') and
                 callable(subclass.connect_to_sensor) and
+                hasattr(subclass, 'get_data') and
+                callable(subclass.get_data) and
                 hasattr(subclass, 'get_raw_data') and
                 callable(subclass.get_raw_data) or
                 NotImplemented)
@@ -19,6 +21,10 @@ class Sensor(metaclass=abc.ABCMeta):
 
     @abc.abstractmethod
     def get_raw_data(self) -> bytes:
+        raise NotImplementedError
+
+    @abc.abstractmethod
+    def get_data(self) -> dict:
         raise NotImplementedError
 
     @staticmethod

@@ -29,6 +29,6 @@ sensors:
     name: "SpecCoSensor"
     path: "/dev/ttyUSB0"
     values: 
-      - temp: 0
-      - hum: 4
-      - co: 2
+      - temperature: int
+      - humidity: short
+      - co: float
