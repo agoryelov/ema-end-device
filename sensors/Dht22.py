@@ -25,21 +25,10 @@ class Dht22(Dht):
     """
     def __init__(self, uid: int, device: int = GPIO_IN) -> None:
         super().__init__(uid, device, model=MODEL_22)
-        
-    # Sets the GPIO to be in input mode
-    def connect_to_sensor(self):
-        DHT_in = self.__gpio_in
-        GPIO.setmode(GPIO.BCM)        # choose BCM or BOARD
-        GPIO.setup(DHT_in, GPIO.IN)   # set a port/pin as an input
-        return True
-    
-    def get_uid(self):
-        return self.__uid
     
     def get_data(self) -> dict:
         self.take_reading()
         readings = {
-            "uid": self.get_uid(),
             "temperature ": self.get_temperature(),
             "relative_humidity": self.get_relative_humidity(),
         }

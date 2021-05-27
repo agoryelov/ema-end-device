@@ -52,7 +52,6 @@ class Dht(Sensor):
     def take_reading(self) -> int:
         try:
             self.__reading = Adafruit_DHT.read_retry(self.__model, self.__gpio_in)
-            #
             if(self.__reading[0] == None or self.__reading[1] == None):
                 raise SensorError("Please check wiring")
         except:
