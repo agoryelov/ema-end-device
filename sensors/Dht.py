@@ -29,10 +29,6 @@ class Dht(Sensor):
         Credit for connect_to_port and get_raw_data goes to
         Noah MacRitchie (noah21mac@gmail.com) and Andrey Goryelov (andrey.goryelov@gmail.com)
     """
-
-    # TODO: what is timeout ?
-    # TODO: It is just a GPIO data in, not serial connection.
-    # TODO: pass it in like : gpio_in = 1, named params
    
     def __init__(self, uid: int, gpio_in: str, model : int) -> None:
         self.__gpio_in = gpio_in
@@ -52,7 +48,7 @@ class Dht(Sensor):
         return True
 
     # Take reading from the sensor
-    # (with retry, it's garunteed to get an output with up to 15 trials )
+    # (with retry, it's guaranteed to get an output with up to 15 trials)
     def take_reading(self) -> int:
         try:
             self.__reading = Adafruit_DHT.read_retry(self.__model, self.__gpio_in)
@@ -62,7 +58,6 @@ class Dht(Sensor):
         except:
             raise SensorReadError("Please check wiring")
 
-    # TODO: necessary?
     def get_raw_data(self)-> float:
         DHT_in = self.__gpio_in   
         GPIO.setmode(GPIO.BCM)  # choose BCM or BOARD

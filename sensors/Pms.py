@@ -121,6 +121,7 @@ class Pms(Sensor):
             start_of_file = self.__serial.read(1)
             if len(start_of_file) == 0:
                 raise SerialTimeoutError("PMS5003 Read Timeout: Failed to read start of frame byte")
+            
             start_of_file = ord(start_of_file) if type(start_of_file) is bytes else start_of_file
 
             if start_of_file == PMS5003_SOF[start_of_file_index]:
@@ -155,15 +156,15 @@ class Pms(Sensor):
     def get_data(self) -> dict:
         self.take_reading()
         reading = {            
-            'PM1.0': self.get_pm('1.0'),
-            'PM2.5': self.get_pm('2.5'),
-            'PM10:' : self.get_pm('10'),
+            'PM1.0': self.get_pm(size=1.0),
+            'PM2.5': self.get_pm(size=2.5),
+            'PM10:' : self.get_pm(size=10),
             
-            'gt_300_nm_ppL' : self.get_particles_gt(micrometers='0.3'),
-            'gt_500_nm_ppL' : self.get_particles_gt(micrometers='0.5'),
-            'gt_1000_nm_ppL' : self.get_particles_gt(micrometers='1.0'),
-            'gt_2500_nm_ppL' : self.get_particles_gt(micrometers='2.5'),
-            'gt_5000_nm_ppL' : self.get_particles_gt(micrometers='5.0'),
-            'gt_10_um_ppL' :  self.get_particles_gt(micrometers='10'),
+            'gt_300_nm_ppL' : self.get_particles_gt(micrometers=0.3),
+            'gt_500_nm_ppL' : self.get_particles_gt(micrometers=0.5),
+            'gt_1000_nm_ppL' : self.get_particles_gt(micrometers=1.0),
+            'gt_2500_nm_ppL' : self.get_particles_gt(micrometers=2.5),
+            'gt_5000_nm_ppL' : self.get_particles_gt(micrometers=5.0),
+            'gt_10_um_ppL' :  self.get_particles_gt(micrometers=10),
         }
         return reading

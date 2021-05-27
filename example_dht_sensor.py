@@ -1,7 +1,5 @@
 from sensors.Dht22 import Dht22 
-from sensors.SensorException import SensorReadError
-
-# uid: int, gpio_in: int, timeout : int, model : str 
+from sensors.SensorException import SensorReadError, SensorUnitConversionError
 
 UUID = 5001 # Some random fake uuid
 
