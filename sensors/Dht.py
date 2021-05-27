@@ -30,8 +30,8 @@ class Dht(Sensor):
         Noah MacRitchie (noah21mac@gmail.com) and Andrey Goryelov (andrey.goryelov@gmail.com)
     """
    
-    def __init__(self, uid: int, gpio_in: str, model : int) -> None:
-        self.__gpio_in = gpio_in
+    def __init__(self, uid: int, device: str, model : int) -> None:
+        self.__gpio_in = int(device)
         self.__model = model
         self.__reading = ()
 
@@ -44,7 +44,7 @@ class Dht(Sensor):
         except:
             log('Error connecting to Dht sensor')
             return False
-                    
+        
         return True
 
     # Take reading from the sensor
