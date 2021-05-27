@@ -1,5 +1,6 @@
 # inheritance library
 # import abc
+from utils.logger import log
 import Adafruit_DHT
 # GPIO lib
 import RPi.GPIO as GPIO           # import RPi.GPIO module
@@ -41,13 +42,14 @@ class Dht(Sensor):
     # Sets the GPIO to be in input mode
     def connect_to_sensor(self):
         DHT_in = self.__gpio_in
-        GPIO.setmode(GPIO.BCM)                # choose BCM or BOARD
+        GPIO.setmode(GPIO.BCM)
         try:
-            status = GPIO.setup(DHT_in, GPIO.IN)  # set a port/pin as an input
+            GPIO.setup(DHT_in, GPIO.IN)  # set a port/pin as an input
         except:
-            raise SensorError("Connection failed, please check wiring")
-            
-        return status
+            log('Error connecting to Dht sensor')
+            return False
+                    
+        return True
 
     # Take reading from the sensor
     # (with retry, it's garunteed to get an output with up to 15 trials )

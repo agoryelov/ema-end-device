@@ -1,5 +1,7 @@
 # inheritance library
 # import abc
+from serial.serialutil import SerialException
+from utils.logger import log
 import Adafruit_DHT
 # GPIO lib
 import RPi.GPIO as GPIO           # import RPi.GPIO module
@@ -71,21 +73,22 @@ class Pms(Sensor):
         self.__timeout = timeout
         self.__baud_rate = baud_rate
         self.__reading = ()
+        self.__serial = None
 
     # Sets the GPIO to be in input mode
     def connect_to_sensor(self) -> serial:
         f"""
         Connects the software to the sensor hardware.
         
-        :return: {serial} 
+        :return: {serial}
         """
         try:
-            ser = serial.Serial(self.__device, self.__baud_rate, timeout=self.__timeout, parity=serial.PARITY_NONE)
+            self.__serial = serial.Serial(self.__device, self.__baud_rate, timeout=self.__timeout, parity=serial.PARITY_NONE)
         except SerialException:
-            Sensor.print_formatted_data({"error": "connecting to sensor"})
-            exit(1)
+            log('Error connecting to PMS sensor')
+            return False
         else:
-            return ser
+            return True
 
     def get_pm_raw(self, size) -> float:
         return self.__reading[DATA_INDICES[f'PM{size}']]
@@ -97,12 +100,14 @@ class Pms(Sensor):
         return self.__reading[DATA_INDICES[f'gt{micrometers}um']]
     
     def get_particles_gt(self, micrometers):
-        return pms_gt_output_to_si(self.__reading[DATA_INDICES[f'g{micrometers}um']])
+        return pms_gt_output_to_si(self.__reading[DATA_INDICES[f'gt{micrometers}um']])
     
     # Get raw data
     def get_raw_data(self)-> float:
-        
-        ser = self.connect_to_sensor()
+        connected = self.connect_to_sensor()
+
+        if not connected:
+            return None
         
         start = time.time()
 
@@ -113,7 +118,7 @@ class Pms(Sensor):
             if elapsed > 5:
                 raise ReadTimeoutError("PMS5003 Read Timeout: Could not find start of frame")
 
-            start_of_file = ser.read(1)
+            start_of_file = self.__serial.read(1)
             if len(start_of_file) == 0:
                 raise SerialTimeoutError("PMS5003 Read Timeout: Failed to read start of frame byte")
             start_of_file = ord(start_of_file) if type(start_of_file) is bytes else start_of_file
@@ -128,13 +133,13 @@ class Pms(Sensor):
 
         checksum = sum(PMS5003_SOF)
 
-        data = bytearray(ser.read(2))  # Get frame length packet
+        data = bytearray(self.__serial.read(2))  # Get frame length packet
         if len(data) != 2:
             raise SerialTimeoutError("PMS5003 Read Timeout: Could not find length packet")
         checksum += sum(data)
         frame_length = struct.unpack(">H", data)[0]
 
-        raw_data = bytearray(ser.read(frame_length))
+        raw_data = bytearray(self.__serial.read(frame_length))
   
         if len(raw_data) != frame_length:
             raise SerialTimeoutError("PMS5003 Read Timeout: Invalid frame length. Got {} bytes, expected {}.".format(len(raw_data), frame_length))

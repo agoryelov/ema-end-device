@@ -31,10 +31,9 @@ class Dht22(Dht):
     # Sets the GPIO to be in input mode
     def connect_to_sensor(self):
         DHT_in = self.__gpio_in
-        # TODO error checking?
-        GPIO.setmode(GPIO.BCM)                 # choose BCM or BOARD
-        status = GPIO.setup(DHT_in, GPIO.IN)  # set a port/pin as an input
-        return status
+        GPIO.setmode(GPIO.BCM)        # choose BCM or BOARD
+        GPIO.setup(DHT_in, GPIO.IN)   # set a port/pin as an input
+        return True
     
     def get_uid(self):
         return self.__uid
