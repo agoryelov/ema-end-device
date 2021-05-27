@@ -29,7 +29,7 @@ class Dht22(Dht):
     def get_data(self) -> dict:
         self.take_reading()
         readings = {
-            "temperature ": self.get_temperature(),
+            "temperature": self.get_temperature(),
             "relative_humidity": self.get_relative_humidity(),
         }
         return readings
