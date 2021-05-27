@@ -1,15 +1,15 @@
-protocol_version: "v1.0.0"
+protocol_version: v1.0.0
 # device id is unique to each device and is used on the cloud
-device_id: "uid8933674632"
+device_id: uid8933674632
 
-access_point_ssid: "wifi_network_name"
-access_point_password: "example_password"
+access_point_ssid: wifi_network_name
+access_point_password: example_password
 
-edge_device_address: "127.90.034"
-edge_device_port: "8080"
+edge_device_address: '127.90.034'
+edge_device_port: 8080
 
 # The communication medium can be either bluetooth or wifi
-communication_medium: "wifi"
+communication_medium: wifi
 
 # Seconds between each message
 transmission_rate: 60
@@ -20,23 +20,24 @@ keep_alive: true
 # sensors contains a list of sensors that are connected to the device.
 # The order of the readings in a message will be the top down order of 
 # all of the "values" in this file.
+# The path is the sensor path, the end device can read 
+# and write to it in order to communicate with the sensor
+# values contain all the different attributes a sensor captures.
+# each attribute specifies the data type used to send the reading. 
 sensors:
-  - 0:
-    # The path is the sensor path, the end device can read 
-    # and write to it in order to communicate with the sensor
-    name: "spec_no2_sensor"
-    path: "/dev/ttyUSB0"
-    # values contain all the different attributes a sensor captures.
-    # The value of each attribute is the number of bytes the device 
-    # will use to send the reading. 
-    values:
-      - temperature: 4
-      - humidity: 0
-      - no2: 2
-  - 1:
-    name: "spec_co_sensor"
-    path: "/dev/ttyUSB0"
+  # - name: spec_co_sensor
+  #   path: /dev/ttyUSB0
+  #   values: 
+  #     - temperature: int
+  #     - relative_humidity: short
+  #     - CO: float
+  - name: pms
+    path: /dev/ttyAMA0
     values: 
-      - temperature: 0
-      - humidity: 4
-      - co2: 2
+      - gt_300_nm_ppL: float
+      - gt_2500_nm_ppL: float
+  - name: dht22
+    path: 4
+    values: 
+      - temperature: float
+      - relative_humidity: float

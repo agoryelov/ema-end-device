@@ -1,5 +1,7 @@
 # inheritance library
 # import abc
+from serial.serialutil import SerialException
+from utils.logger import log
 import Adafruit_DHT
 # GPIO lib
 import RPi.GPIO as GPIO           # import RPi.GPIO module
@@ -24,17 +26,20 @@ from utils.unit_conversion.concentrations import μgm3_to_gpl
 from utils.unit_conversion.concentrations import pms_gt_output_to_si
 
 
+TIMEOUT = 3
+BAUD_RATE = 9600
+
 DATA_INDICES = {
     "PM1.0": 0,
     "PM2.5": 1,
     "PM10" : 2,
     
-    "gt0.3μm" : 6,
-    "gt0.5μm" : 7,
-    "gt1.0μm" : 8,
-    "gt2.5μm" : 9,
-    "gt5.0μm" : 10,
-    "gt10μm" : 11,
+    "gt0.3um" : 6,
+    "gt0.5um" : 7,
+    "gt1.0um" : 8,
+    "gt2.5um" : 9,
+    "gt5.0um" : 10,
+    "gt10um" : 11,
     }
 
 # Start of file flag
@@ -62,93 +67,47 @@ class Pms(Sensor):
     # TODO: It is just a GPIO data in, not serial connection.
     # TODO: pass it in like : gpio_in = 1, named params
    
-    def __init__(self, uid: int, device: str, timeout: int, baud_rate: int):
+    def __init__(self, uid: int, device: str, timeout: int = 3, baud_rate: int = BAUD_RATE):
         self.__uid = uid
         self.__device = device
         self.__timeout = timeout
         self.__baud_rate = baud_rate
         self.__reading = ()
-
+        self.__serial = None
 
     # Sets the GPIO to be in input mode
     def connect_to_sensor(self) -> serial:
         f"""
         Connects the software to the sensor hardware.
         
-        :return: {serial} 
+        :return: {serial}
         """
         try:
-            ser = serial.Serial(self.__device, self.__baud_rate, timeout=self.__timeout, parity=serial.PARITY_NONE)
+            self.__serial = serial.Serial(self.__device, self.__baud_rate, timeout=self.__timeout, parity=serial.PARITY_NONE)
         except SerialException:
-            Sensor.print_formatted_data({"error": "connecting to sensor"})
-            exit(1)
+            log('Error connecting to PMS sensor')
+            return False
         else:
-            return ser
+            return True
 
-    def get_pm_1_raw(self)->float:
-        return self.__reading[DATA_INDICES['PM1.0']]
-    
-    def get_pm_2_5_raw(self)->float:
-        return self.__reading[DATA_INDICES['PM2.5']]
-    
-    def get_pm_10_raw(self)->float:
-        return self.__reading[DATA_INDICES['PM2.5']]
-    
-    def get_pm_1(self)->float:
-        return μgm3_to_gpl(self.__reading[DATA_INDICES['PM1.0']])
-    
-    def get_pm_2_5(self)->float:
-        return μgm3_to_gpl(self.__reading[DATA_INDICES['PM2.5']])
-    
-    def get_pm_10(self)->float:
-        return μgm3_to_gpl(self.__reading[DATA_INDICES['PM2.5']])
-    
-    
-    
-    #greater than 
-    def get_gt_0_3_raw(self)->float:
-        return self.__reading[DATA_INDICES['gt0.3μm']]
-    
-    def get_gt_0_5_raw(self)->float:
-        return self.__reading[DATA_INDICES['gt0.5μm']]
-    
-    def get_gt_1_raw(self)->float:
-        return self.__reading[DATA_INDICES['gt1.0μm']]
-    
-    def get_gt_2_5_raw(self)->float:
-        return self.__reading[DATA_INDICES['gt2.5μm']]
+    def get_pm_raw(self, size) -> float:
+        return self.__reading[DATA_INDICES[f'PM{size}']]
 
-    def get_gt_5_raw(self)->float:
-        return self.__reading[DATA_INDICES['gt5.0μm']]
+    def get_pm(self, size) -> float:
+        return μgm3_to_gpl(self.__reading[DATA_INDICES[f'PM{size}']])
     
-    def get_gt_10_raw(self)->float:
-        return self.__reading[DATA_INDICES['gt10μm']]
+    def get_particles_gt_raw(self, micrometers):
+        return self.__reading[DATA_INDICES[f'gt{micrometers}um']]
     
-    # processed
-    def get_gt_0_3(self)->float:
-        return pms_gt_output_to_si(self.__reading[DATA_INDICES['gt0.3μm']])
+    def get_particles_gt(self, micrometers):
+        return pms_gt_output_to_si(self.__reading[DATA_INDICES[f'gt{micrometers}um']])
     
-    def get_gt_0_5(self)->float:
-        return pms_gt_output_to_si(self.__reading[DATA_INDICES['gt0.5μm']])
-    
-    def get_gt_1(self)->float:
-        return pms_gt_output_to_si(self.__reading[DATA_INDICES['gt1.0μm']])
-    
-    def get_gt_2_5(self)->float:
-        return pms_gt_output_to_si(self.__reading[DATA_INDICES['gt2.5μm']])
-
-    def get_gt_5(self)->float:
-        return pms_gt_output_to_si(self.__reading[DATA_INDICES['gt5.0μm']])
-    
-    def get_gt_10(self)->float:
-        return pms_gt_output_to_si(self.__reading[DATA_INDICES['gt10μm']])
-    
-    
-
     # Get raw data
     def get_raw_data(self)-> float:
-        
-        ser = self.connect_to_sensor()
+        connected = self.connect_to_sensor()
+
+        if not connected:
+            return None
         
         start = time.time()
 
@@ -159,9 +118,10 @@ class Pms(Sensor):
             if elapsed > 5:
                 raise ReadTimeoutError("PMS5003 Read Timeout: Could not find start of frame")
 
-            start_of_file = ser.read(1)
+            start_of_file = self.__serial.read(1)
             if len(start_of_file) == 0:
                 raise SerialTimeoutError("PMS5003 Read Timeout: Failed to read start of frame byte")
+            
             start_of_file = ord(start_of_file) if type(start_of_file) is bytes else start_of_file
 
             if start_of_file == PMS5003_SOF[start_of_file_index]:
@@ -174,13 +134,13 @@ class Pms(Sensor):
 
         checksum = sum(PMS5003_SOF)
 
-        data = bytearray(ser.read(2))  # Get frame length packet
+        data = bytearray(self.__serial.read(2))  # Get frame length packet
         if len(data) != 2:
             raise SerialTimeoutError("PMS5003 Read Timeout: Could not find length packet")
         checksum += sum(data)
         frame_length = struct.unpack(">H", data)[0]
 
-        raw_data = bytearray(ser.read(frame_length))
+        raw_data = bytearray(self.__serial.read(frame_length))
   
         if len(raw_data) != frame_length:
             raise SerialTimeoutError("PMS5003 Read Timeout: Invalid frame length. Got {} bytes, expected {}.".format(len(raw_data), frame_length))
@@ -188,28 +148,23 @@ class Pms(Sensor):
         return raw_data
 
     def take_reading(self) -> int:
-        print(self.get_raw_data())
         try:
             self.__reading =  struct.unpack(">HHHHHHHHHHHHHH", self.get_raw_data())
-            print("reading:", self.__reading)
         except:
             raise SensorReadError("cannot get a reading after 15 trials, please check wiring")
 
-    def format_data(self) -> dict:
-        reading = {
-           # "PM1.0 ug/m3:" : self.get_pm_1_raw(),
-           # "PM2.5 ug/m3:" : self.get_pm_2_5_raw(),
-           # "PM10  ug/m3" : self.get_pm_10_raw(),
+    def get_data(self) -> dict:
+        self.take_reading()
+        reading = {            
+            'PM1.0': self.get_pm(size=1.0),
+            'PM2.5': self.get_pm(size=2.5),
+            'PM10:' : self.get_pm(size=10),
             
-            'PM1.0': self.get_pm_1()  ,
-            'PM2.5': self.get_pm_2_5(),
-            'PM10:' : self.get_pm_10(),
-            
-            '> 0.3 um/L' : self.get_gt_0_3(),
-            '> 0.5 um/L' : self.get_gt_0_5(),
-            '> 1.0 um/L' : self.get_gt_1(),
-            '> 2.5 um/L' : self.get_gt_2_5(),
-            '> 5.0 um/L' : self.get_gt_5(),
-            '> 10 um/L' :  self.get_gt_10(),
+            'gt_300_nm_ppL' : self.get_particles_gt(micrometers=0.3),
+            'gt_500_nm_ppL' : self.get_particles_gt(micrometers=0.5),
+            'gt_1000_nm_ppL' : self.get_particles_gt(micrometers=1.0),
+            'gt_2500_nm_ppL' : self.get_particles_gt(micrometers=2.5),
+            'gt_5000_nm_ppL' : self.get_particles_gt(micrometers=5.0),
+            'gt_10_um_ppL' :  self.get_particles_gt(micrometers=10),
         }
         return reading

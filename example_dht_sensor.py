@@ -1,15 +1,11 @@
 from sensors.Dht22 import Dht22 
-from sensors.SensorException import SensorReadError
+from sensors.SensorException import SensorReadError, SensorUnitConversionError
 
-# uid: int, gpio_in: int, timeout : int, model : str 
-
-GPIO_IN = 4 # DHT22 gpio data in
-MODEL = 'DHT22' # Not needed
 UUID = 5001 # Some random fake uuid
 
 
 def main():
-    dht22_obj = Dht22(UUID, GPIO_IN, MODEL)
+    dht22_obj = Dht22(UUID)
     dht22_obj.connect_to_sensor()
     try:
         dht22_obj.take_reading()

@@ -1,3 +1,4 @@
+from utils.logger import log
 import serial
 from serial import SerialException
 from sensors.Sensor import Sensor
@@ -33,20 +34,20 @@ class SpecDgs(Sensor):
         self.__timeout = timeout
         self.__baud_rate = baud_rate
         self.__reading = ()
+        self.__serial = None
 
-    def connect_to_sensor(self) -> serial:
+    def connect_to_sensor(self) -> bool:
         f"""
         Connects the software to the sensor hardware.
-        
-        :return: {serial} 
         """
+
         try:
-            ser = serial.Serial(self.__device, self.__baud_rate, timeout=self.__timeout, parity=serial.PARITY_NONE)
+            self.__serial = serial.Serial(self.__device, self.__baud_rate, timeout=self.__timeout, parity=serial.PARITY_NONE)
         except SerialException:
-            Sensor.print_formatted_data({"error": "connecting to sensor"})
-            exit(1)
+            log('Error connecting to SPEC-DGS sensor')
+            return False
         else:
-            return ser
+            return self.__serial.is_open()
 
     def get_raw_data(self) -> bytes:
         f"""
@@ -56,16 +57,19 @@ class SpecDgs(Sensor):
         """
         start_reading = '\r'
 
-        ser = self.connect_to_sensor()
+        connected = self.connect_to_sensor()
+
+        if not connected:
+            return None
 
         try:
-            ser.write(start_reading.encode())
-            line = ser.readline()
+            self.__serial.write(start_reading.encode())
+            line = self.__serial.readline()
         except SerialException:
-            Sensor.print_formatted_data({"error": "reading from sensor"})
-            exit(1)
+            log("Error reading from SPEC-DGS sensor")
+            return None
         else:
-            ser.close()
+            self.__serial.close()
             return line
 
     def take_reading(self):
