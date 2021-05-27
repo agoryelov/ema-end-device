@@ -81,7 +81,7 @@ class Pms(Sensor):
         """
         try:
             ser = serial.Serial(self.__device, self.__baud_rate, timeout=self.__timeout, parity=serial.PARITY_NONE)
-        except SerialException:
+        except SensorReadError:
             Sensor.print_formatted_data({"error": "connecting to sensor"})
             exit(1)
         else:
@@ -97,7 +97,7 @@ class Pms(Sensor):
         return self.__reading[DATA_INDICES[f'gt{micrometers}um']]
     
     def get_particles_gt(self, micrometers):
-        return pms_gt_output_to_si(self.__reading[DATA_INDICES[f'g{micrometers}um']])
+        return pms_gt_output_to_si(self.__reading[DATA_INDICES[f'gt{micrometers}um']])
     
     # Get raw data
     def get_raw_data(self)-> float:

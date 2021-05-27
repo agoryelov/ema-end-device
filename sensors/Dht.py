@@ -4,7 +4,7 @@ import Adafruit_DHT
 # GPIO lib
 import RPi.GPIO as GPIO           # import RPi.GPIO module
 
-from sensors.SensorException import SensorError, SensorReadError
+from sensors.SensorException import SensorReadError
 from utils.unit_conversion.ConversionException import SensorUnitConversionError
 
 
@@ -20,8 +20,8 @@ from utils.unit_conversion.temperature import celsius_to_kelvin
 
 DATA_INDICES = {
     "relative_humidity": 0,
-    "temperature": 1,
-}
+        "temperature": 1,
+    }
 
 class Dht(Sensor):
     """
@@ -33,10 +33,20 @@ class Dht(Sensor):
     # TODO: It is just a GPIO data in, not serial connection.
     # TODO: pass it in like : gpio_in = 1, named params
    
-    def __init__(self, uid: int, gpio_in: str, model : int) -> None:
-        self.__gpio_in = gpio_in
-        self.__model = model
-        self.__reading = ()
+    def __init__(self, uid: int, device:str, model : str ) -> None:
+        # super().__init__()
+        self.__uid = uid
+        self.__gpio_in = device
+        # self.__timeout = timeout
+        if model.lower() == 'dht11':
+            self.__model = 11
+        # elif model.lower() == 'am2302':
+        #     self.__model = 22
+        else:
+            self.__model = 22
+        self.__reading = () 
+
+
 
     # Sets the GPIO to be in input mode
     def connect_to_sensor(self):
@@ -59,6 +69,7 @@ class Dht(Sensor):
                 raise SensorError("Please check wiring")
         except:
             raise SensorReadError("Please check wiring")
+
 
     # TODO: necessary?
     def get_raw_data(self)-> float:
@@ -85,3 +96,5 @@ class Dht(Sensor):
         
         return relative_humidity_reading
     
+   
+
