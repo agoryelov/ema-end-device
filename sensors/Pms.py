@@ -101,7 +101,7 @@ class Pms(Sensor):
         return μgm3_to_gpl(self.__reading[DATA_INDICES['PM2.5']])
     
     def get_pm_10(self)->float:
-        return μgm3_to_gpl(self.__reading[DATA_INDICES['PM2.5']])
+        return μgm3_to_gpl(self.__reading[DATA_INDICES['PM10']])
     
     
     
