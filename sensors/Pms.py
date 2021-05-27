@@ -24,6 +24,9 @@ from utils.unit_conversion.concentrations import μgm3_to_gpl
 from utils.unit_conversion.concentrations import pms_gt_output_to_si
 
 
+TIMEOUT = 3
+BAUD_RATE = 9600
+
 DATA_INDICES = {
     "PM1.0": 0,
     "PM2.5": 1,
@@ -62,7 +65,7 @@ class Pms(Sensor):
     # TODO: It is just a GPIO data in, not serial connection.
     # TODO: pass it in like : gpio_in = 1, named params
    
-    def __init__(self, uid: int, device: str, timeout: int, baud_rate: int):
+    def __init__(self, uid: int, device: str, timeout: int = 3, baud_rate: int = BAUD_RATE):
         self.__uid = uid
         self.__device = device
         self.__timeout = timeout

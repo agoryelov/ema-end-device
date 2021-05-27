@@ -39,7 +39,7 @@ def number_to_bytes(number, data_type) -> bytearray:
   else:
     return bytearray()
 
-def reading_to_bytes(driver_values: dict, config_values: list):
+def reading_to_bytes(driver_values: dict, config_values: list) -> bytearray:
   output = bytearray()
   
   for config_value in config_values:

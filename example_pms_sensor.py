@@ -1,15 +1,10 @@
 from sensors.Pms import Pms
 
 def main():
-	DEVICE = '/dev/ttyAMA0'
-	TIMEOUT = 3
-	BAUD_RATE = 9600
-	PIN_ENABLE = 22
-	PIN_RESET = 27
-	
+	DEVICE = '/dev/ttyAMA0'	
 	UUID = 5002
 	
-	pms = Pms(UUID, DEVICE, TIMEOUT, BAUD_RATE)
+	pms = Pms(UUID, DEVICE)
 	
 	try:
 		pms.take_reading()

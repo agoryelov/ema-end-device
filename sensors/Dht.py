@@ -33,18 +33,10 @@ class Dht(Sensor):
     # TODO: It is just a GPIO data in, not serial connection.
     # TODO: pass it in like : gpio_in = 1, named params
    
-    def __init__(self, uid: int, gpio_in: str, model : str ) -> None:
-        # super().__init__()
-        self.__uid = uid
+    def __init__(self, uid: int, gpio_in: str, model : int) -> None:
         self.__gpio_in = gpio_in
-        # self.__timeout = timeout
-        if model.lower() == 'dht11':
-            self.__model = 11
-        # elif model.lower() == 'am2302':
-        #     self.__model = 22
-        else:
-            self.__model = 22
-        self.__reading = () 
+        self.__model = model
+        self.__reading = ()
 
     # Sets the GPIO to be in input mode
     def connect_to_sensor(self):
