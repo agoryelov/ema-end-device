@@ -19,7 +19,7 @@ from sensors.Sensor import Sensor
 from utils.unit_conversion.temperature import celsius_to_kelvin
 
 DATA_INDICES = {
-    "humidity": 0,
+    "relative_humidity": 0,
     "temperature": 1,
 }
 
@@ -46,8 +46,6 @@ class Dht(Sensor):
             self.__model = 22
         self.__reading = () 
 
-
-
     # Sets the GPIO to be in input mode
     def connect_to_sensor(self):
         DHT_in = self.__gpio_in
@@ -70,7 +68,6 @@ class Dht(Sensor):
         except:
             raise SensorReadError("Please check wiring")
 
-
     # TODO: necessary?
     def get_raw_data(self)-> float:
         DHT_in = self.__gpio_in   
@@ -87,14 +84,12 @@ class Dht(Sensor):
 
     # grab from self._reading, 
     # then take the field from the right index
-    def get_humidity(self) -> float:
+    def get_relative_humidity(self) -> float:
         relative_humidity_reading =  0.00
         try :
-            relative_humidity_reading = self.__reading[DATA_INDICES['humidity']]
+            relative_humidity_reading = self.__reading[DATA_INDICES['relative_humidity']]
         except:
             raise SensorUnitConversionError("Cannot conver from Celsius to Kelvin, check input!")
         
         return relative_humidity_reading
     
-   
-

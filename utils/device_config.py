@@ -51,4 +51,4 @@ def reading_to_bytes(driver_values: dict, config_values: list):
 
     output.extend(reading_bytes)
 
-  return(output)
+  return output

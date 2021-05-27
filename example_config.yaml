@@ -29,13 +29,13 @@ sensors:
     # each attribute specifies the data type used to send the reading. 
     values:
       - temperature: int
-      - humidity: short
+      - relative_humidity: short
       - NO2: float
   - name: "spec_co_sensor"
     path: "/dev/ttyUSB0"
     values: 
       - temperature: int
-      - humidity: short
+      - relative_humidity: short
       - CO: float
   - name: "pms"
     path: "/dev/ttyUSB0"
@@ -46,5 +46,5 @@ sensors:
     path: "/dev/ttyUSB0"
     values: 
       - temperature: float
-      - humidity: float
+      - relative_humidity: float
 

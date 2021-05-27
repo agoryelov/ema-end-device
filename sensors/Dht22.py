@@ -45,6 +45,6 @@ class Dht22(Dht):
         readings = {
             "uid": self.get_uid(),
             "temperature ": self.get_temperature(),
-            "humidity": self.get_humidity(),
+            "relative_humidity": self.get_relative_humidity(),
         }
         return readings

@@ -18,7 +18,7 @@ class SpecCoSensor(SpecDgs):
             "serial_number": self.get_serial_number(),
             "CO": ppb_to_ppm(self.get_measurement()),
             "temperature": self.get_temperature(),
-            "humidity": self.get_relative_humidity(),
+            "relative_humidity": self.get_relative_humidity(),
         }
 
         return reading_dict
