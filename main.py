@@ -24,18 +24,19 @@ def main():
         else:
             print(f'Uanble to load {sensor_name} driver')
     
-    for driver_name in loaded_drivers:
-        sensor_driver : Sensor = loaded_drivers[driver_name]
-        
+    for sensor_name in loaded_drivers:
+        sensor_driver : Sensor = loaded_drivers[sensor_name]
+
+        print(f'Connecting to sensor {sensor_name}')
         connected = sensor_driver.connect_to_sensor()
         
         if connected:
             driver_values = sensor_driver.get_data()
             config_values = device_config.get_values(sensor_name)
-            print(f"Taking raw reading from {driver_name}: {driver_values}")
+            print(f"Taking raw reading from {sensor_name}: {driver_values}")
             
             sensor_reading = reading_to_bytes(driver_values, config_values)
-            print(sensor_reading)
+            print(f'Raw reading from {sensor_name}: {sensor_reading}')
 
 
 if __name__ == "__main__":
