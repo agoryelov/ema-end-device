@@ -33,10 +33,10 @@ def main():
         if connected:
             driver_values = sensor_driver.get_data()
             config_values = device_config.get_values(sensor_name)
-            print(f"Taking raw reading from {sensor_name}: {driver_values}")
+            print(f"Taking a reading from {sensor_name}: {driver_values}")
             
             sensor_reading = reading_to_bytes(driver_values, config_values)
-            print(f'Raw reading from {sensor_name}: {sensor_reading}')
+            print(f'Packed binary reading from {sensor_name}: {sensor_reading}')
 
 
 if __name__ == "__main__":
