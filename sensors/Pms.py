@@ -29,12 +29,12 @@ DATA_INDICES = {
     "PM2.5": 1,
     "PM10" : 2,
     
-    "gt0.3μm" : 6,
-    "gt0.5μm" : 7,
-    "gt1.0μm" : 8,
-    "gt2.5μm" : 9,
-    "gt5.0μm" : 10,
-    "gt10μm" : 11,
+    "gt0.3um" : 6,
+    "gt0.5um" : 7,
+    "gt1.0um" : 8,
+    "gt2.5um" : 9,
+    "gt5.0um" : 10,
+    "gt10um" : 11,
     }
 
 # Start of file flag
@@ -69,7 +69,6 @@ class Pms(Sensor):
         self.__baud_rate = baud_rate
         self.__reading = ()
 
-
     # Sets the GPIO to be in input mode
     def connect_to_sensor(self) -> serial:
         f"""
@@ -85,66 +84,18 @@ class Pms(Sensor):
         else:
             return ser
 
-    def get_pm_1_raw(self)->float:
-        return self.__reading[DATA_INDICES['PM1.0']]
-    
-    def get_pm_2_5_raw(self)->float:
-        return self.__reading[DATA_INDICES['PM2.5']]
-    
-    def get_pm_10_raw(self)->float:
-        return self.__reading[DATA_INDICES['PM2.5']]
-    
-    def get_pm_1(self)->float:
-        return μgm3_to_gpl(self.__reading[DATA_INDICES['PM1.0']])
-    
-    def get_pm_2_5(self)->float:
-        return μgm3_to_gpl(self.__reading[DATA_INDICES['PM2.5']])
-    
-    def get_pm_10(self)->float:
-        return μgm3_to_gpl(self.__reading[DATA_INDICES['PM2.5']])
-    
-    
-    
-    #greater than 
-    def get_gt_0_3_raw(self)->float:
-        return self.__reading[DATA_INDICES['gt0.3μm']]
-    
-    def get_gt_0_5_raw(self)->float:
-        return self.__reading[DATA_INDICES['gt0.5μm']]
-    
-    def get_gt_1_raw(self)->float:
-        return self.__reading[DATA_INDICES['gt1.0μm']]
-    
-    def get_gt_2_5_raw(self)->float:
-        return self.__reading[DATA_INDICES['gt2.5μm']]
+    def get_pm_raw(self, size) -> float:
+        return self.__reading[DATA_INDICES[f'PM{size}']]
 
-    def get_gt_5_raw(self)->float:
-        return self.__reading[DATA_INDICES['gt5.0μm']]
+    def get_pm(self, size) -> float:
+        return μgm3_to_gpl(self.__reading[DATA_INDICES[f'PM{size}']])
     
-    def get_gt_10_raw(self)->float:
-        return self.__reading[DATA_INDICES['gt10μm']]
+    def get_particles_gt_raw(self, micrometers):
+        return self.__reading[DATA_INDICES[f'gt{micrometers}um']]
     
-    # processed
-    def get_gt_0_3(self)->float:
-        return pms_gt_output_to_si(self.__reading[DATA_INDICES['gt0.3μm']])
+    def get_particles_gt(self, micrometers):
+        return pms_gt_output_to_si(self.__reading[DATA_INDICES[f'g{micrometers}um']])
     
-    def get_gt_0_5(self)->float:
-        return pms_gt_output_to_si(self.__reading[DATA_INDICES['gt0.5μm']])
-    
-    def get_gt_1(self)->float:
-        return pms_gt_output_to_si(self.__reading[DATA_INDICES['gt1.0μm']])
-    
-    def get_gt_2_5(self)->float:
-        return pms_gt_output_to_si(self.__reading[DATA_INDICES['gt2.5μm']])
-
-    def get_gt_5(self)->float:
-        return pms_gt_output_to_si(self.__reading[DATA_INDICES['gt5.0μm']])
-    
-    def get_gt_10(self)->float:
-        return pms_gt_output_to_si(self.__reading[DATA_INDICES['gt10μm']])
-    
-    
-
     # Get raw data
     def get_raw_data(self)-> float:
         
@@ -188,28 +139,23 @@ class Pms(Sensor):
         return raw_data
 
     def take_reading(self) -> int:
-        print(self.get_raw_data())
         try:
             self.__reading =  struct.unpack(">HHHHHHHHHHHHHH", self.get_raw_data())
-            print("reading:", self.__reading)
         except:
             raise SensorReadError("cannot get a reading after 15 trials, please check wiring")
 
-    def format_data(self) -> dict:
-        reading = {
-           # "PM1.0 ug/m3:" : self.get_pm_1_raw(),
-           # "PM2.5 ug/m3:" : self.get_pm_2_5_raw(),
-           # "PM10  ug/m3" : self.get_pm_10_raw(),
+    def get_data(self) -> dict:
+        self.take_reading()
+        reading = {            
+            'PM1.0': self.get_pm('1.0'),
+            'PM2.5': self.get_pm('2.5'),
+            'PM10:' : self.get_pm('10'),
             
-            'PM1.0': self.get_pm_1()  ,
-            'PM2.5': self.get_pm_2_5(),
-            'PM10:' : self.get_pm_10(),
-            
-            '> 0.3 um/L' : self.get_gt_0_3(),
-            '> 0.5 um/L' : self.get_gt_0_5(),
-            '> 1.0 um/L' : self.get_gt_1(),
-            '> 2.5 um/L' : self.get_gt_2_5(),
-            '> 5.0 um/L' : self.get_gt_5(),
-            '> 10 um/L' :  self.get_gt_10(),
+            'gt_300_nm_ppL' : self.get_particles_gt(micrometers='0.3'),
+            'gt_500_nm_ppL' : self.get_particles_gt(micrometers='0.5'),
+            'gt_1000_nm_ppL' : self.get_particles_gt(micrometers='1.0'),
+            'gt_2500_nm_ppL' : self.get_particles_gt(micrometers='2.5'),
+            'gt_5000_nm_ppL' : self.get_particles_gt(micrometers='5.0'),
+            'gt_10_um_ppL' :  self.get_particles_gt(micrometers='10'),
         }
         return reading

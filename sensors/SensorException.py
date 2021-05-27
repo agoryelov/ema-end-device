@@ -33,6 +33,3 @@ class SensorUnitConversionError(SensorError):
         return self.__message
     def get_message(self):
         return self.__message
-
-
-

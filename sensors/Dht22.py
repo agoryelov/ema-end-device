@@ -15,9 +15,7 @@ from sensors.Dht import Dht
 # https://github.com/clintonbf/sensor_interface/tree/master/unit_conversion
 from utils.unit_conversion.temperature import celsius_to_kelvin
 
-from sensors.SensorDataFormatter import SensorDataFormatter
-
-class Dht22(Dht, SensorDataFormatter):
+class Dht22(Dht):
     """
         Credit for connect_to_port and get_raw_data goes to
         Noah MacRitchie (noah21mac@gmail.com) and Andrey Goryelov (andrey.goryelov@gmail.com)
@@ -42,10 +40,11 @@ class Dht22(Dht, SensorDataFormatter):
     def get_uid(self):
         return self.__uid
     
-    def format_data(self) -> dict :
+    def get_data(self) -> dict:
+        self.take_reading()
         readings = {
             "uid": self.get_uid(),
             "temperature ": self.get_temperature(),
-            "relative_humidity": self.get_relative_humidity(),
+            "humidity": self.get_humidity(),
         }
         return readings

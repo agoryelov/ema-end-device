@@ -21,21 +21,30 @@ keep_alive: true
 # The order of the readings in a message will be the top down order of 
 # all of the "values" in this file.
 sensors:
-  - 0:
     # The path is the sensor path, the end device can read 
     # and write to it in order to communicate with the sensor
-    name: "spec_no2_sensor"
+  - name: "spec_no2_sensor"
     path: "/dev/ttyUSB0"
     # values contain all the different attributes a sensor captures.
     # each attribute specifies the data type used to send the reading. 
     values:
       - temperature: int
       - humidity: short
-      - no2: float
-  - 1:
-    name: "spec_co_sensor"
+      - NO2: float
+  - name: "spec_co_sensor"
     path: "/dev/ttyUSB0"
     values: 
       - temperature: int
       - humidity: short
-      - co: float
+      - CO: float
+  - name: "pms"
+    path: "/dev/ttyUSB0"
+    values: 
+      - gt_300_nm_ppL: float
+      - gt_2500_nm_ppL: float
+  - name: "dht22"
+    path: "/dev/ttyUSB0"
+    values: 
+      - temperature: float
+      - humidity: float
+

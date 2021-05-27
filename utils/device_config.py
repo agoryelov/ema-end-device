@@ -1,6 +1,9 @@
 import yaml
 import struct
 
+SHORT_BYTE_SIZE = 2
+INT_BYTE_SIZE = 4
+
 class DeviceConfig:
   def __init__(self, path):
     with open(path) as config_file:
@@ -20,13 +23,13 @@ class DeviceConfig:
     for sensor in sensors:
       if sensor['name'] is sensor_name:
         return sensor['values']
-    raise Exception("bad sensor name")
+    raise ValueError("Invalid sensor name")
 
 def number_to_bytes(number, data_type) -> bytearray:
   if data_type == 'int':
-    return int(number).to_bytes(4, byteorder='big', signed=True)
+    return int(number).to_bytes(INT_BYTE_SIZE, byteorder='big', signed=True)
   elif data_type == 'short':
-    return int(number).to_bytes(2, byteorder='big', signed=True)
+    return int(number).to_bytes(SHORT_BYTE_SIZE, byteorder='big', signed=True)
   elif data_type == 'byte':
     return int(number).to_bytes(1, byteorder='big', signed=True)
   elif data_type == 'float':

@@ -4,7 +4,7 @@ import Adafruit_DHT
 # GPIO lib
 import RPi.GPIO as GPIO           # import RPi.GPIO module
 
-from sensors.SensorException import SensorReadError
+from sensors.SensorException import SensorError, SensorReadError
 from utils.unit_conversion.ConversionException import SensorUnitConversionError
 
 
@@ -19,9 +19,9 @@ from sensors.Sensor import Sensor
 from utils.unit_conversion.temperature import celsius_to_kelvin
 
 DATA_INDICES = {
-    "relative_humidity": 0,
-        "temperature": 1,
-    }
+    "humidity": 0,
+    "temperature": 1,
+}
 
 class Dht(Sensor):
     """
@@ -87,10 +87,10 @@ class Dht(Sensor):
 
     # grab from self._reading, 
     # then take the field from the right index
-    def get_relative_humidity(self) -> float:
+    def get_humidity(self) -> float:
         relative_humidity_reading =  0.00
         try :
-            relative_humidity_reading = self.__reading[DATA_INDICES['relative_humidity']]
+            relative_humidity_reading = self.__reading[DATA_INDICES['humidity']]
         except:
             raise SensorUnitConversionError("Cannot conver from Celsius to Kelvin, check input!")
         
