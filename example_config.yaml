@@ -27,17 +27,17 @@ keep_alive: true
 sensors:
   - name: spec_co_sensor
     path: /dev/ttyUSB0
-    values: 
+    values:
       - temperature: int
       - relative_humidity: short
       - CO: int
-  # - name: pms
-  #   path: /dev/ttyAMA0
-  #   values: 
-  #     - gt_300_nm_ppL: float
-  #     - gt_2500_nm_ppL: float
-  # - name: dht22
-  #   path: 4
-  #   values: 
-  #     - temperature: float
-  #     - relative_humidity: float
+  - name: pms
+    path: /dev/ttyAMA0
+    values: 
+      - gt_300_nm_ppL: float
+      - gt_2500_nm_ppL: float
+  - name: dht22
+    path: 4
+    values: 
+      - temperature: float
+      - relative_humidity: float

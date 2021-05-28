@@ -78,7 +78,6 @@ class SpecDgs(Sensor):
         """
 
         self.__reading = tuple(self.get_raw_data().decode().split(","))
-        print(self.__reading)
         if len(self.__reading) != 11:
             raise SensorReadError("Error getting sensor reading")
 
