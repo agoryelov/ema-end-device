@@ -43,7 +43,7 @@ def get_packed_readings(loaded_drivers, device_config) -> bytearray:
             packed_readings.extend(sensor_reading)
     
     return packed_readings
-            
+
 def main():
     # setup configurations
     configs = DeviceConfig(CONFIG_PATH)
@@ -54,13 +54,13 @@ def main():
     medium = configs.get_config_value("communication_medium")
 
     # connect to wifi if necessary
-    if medium == "wifi":
-        ssid = configs.get_config_value("access_point_ssid")
-        p_key = configs.get_config_value("access_point_password")
-        if p_key == "none":
-            p_key = None
-        wap = Finder(server_name=ssid, password=p_key, interface="wlan0")
-        wap.connection()
+    # if medium == "wifi":
+    #     ssid = configs.get_config_value("access_point_ssid")
+    #     p_key = configs.get_config_value("access_point_password")
+    #     if p_key == "none":
+    #         p_key = None
+    #     wap = Finder(server_name=ssid, password=p_key, interface="wlx000f6001ea46")
+    #     wap.connection()
 
     # setup socket connection. default is AF_UNIX, you can set bluetooth too
     edge_addr = configs.get_config_value("edge_device_address")

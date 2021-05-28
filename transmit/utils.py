@@ -2,7 +2,7 @@ import os
 from transmit.connectClient import Connection
 import time
 
-
+CONFIG_PATH = "example_config.yaml"
 def handshake(s_socket: Connection, uid: int):
     """
     perform necessary handshake with the edge device before sending the sensor readings
@@ -11,7 +11,7 @@ def handshake(s_socket: Connection, uid: int):
     :return: new local device id for the end device
     """
     # size of config file
-    st = os.stat("config_v1.yaml")
+    st = os.stat(CONFIG_PATH)
     size = st.st_size
 
     # first message contains 2 bytes of uid and 3 bytes of config file size
@@ -32,7 +32,7 @@ def handshake(s_socket: Connection, uid: int):
 
     # if config file needs to be sent to the edge
     if config_required == 1:
-        f = open("config_v1.yaml", "rb")
+        f = open(CONFIG_PATH, "rb")
         data = f.read(size)
         s_socket.s_send(data)
         f.close()

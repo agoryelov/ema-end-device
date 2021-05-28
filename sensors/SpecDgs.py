@@ -47,7 +47,7 @@ class SpecDgs(Sensor):
             log('Error connecting to SPEC-DGS sensor')
             return False
         else:
-            return self.__serial.is_open()
+            return True
 
     def get_raw_data(self) -> bytes:
         f"""
@@ -78,8 +78,8 @@ class SpecDgs(Sensor):
         """
 
         self.__reading = tuple(self.get_raw_data().decode().split(","))
-
-        if len(self.__reading) is not 11:
+        print(self.__reading)
+        if len(self.__reading) != 11:
             raise SensorReadError("Error getting sensor reading")
 
     def get_uid(self):
