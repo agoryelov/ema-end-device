@@ -25,10 +25,13 @@ sensor (sensor model).
 
 ### Sensors
 
-`sensor.py` (an abstract base class) defines two methods to implement: `connect_to_sensor()` and `get_raw_data()`
+`sensor.py` (an abstract base class) defines methods to implement:
+* `connect_to_sensor()`
+* `get_raw_data()`
+* `get_data()`
 
-It implements one method: `sensors/sensor.print_formatted_data()`. It should be called by any sensor model to
-standardize output. It accepts a parameter supplied by `format_data()` (See [Sensor manufacturers](#sensor-manufacturers)).
+It implements one method: `sensors/sensor.print_formatted_data()`. It can be called by any sensor model to
+output data to console.  (See [Sensor manufacturers](#sensor-manufacturers)).
 
 ## `connect_to_sensor()` 
 
@@ -37,7 +40,6 @@ This method connects to the hardware.
 ## `get_raw_data()`
 
 This method gets raw data from the sensor hardware.
-
 ***
 **Note**: "raw data" is arbitrarily defined as the "first accessible" data from a sensor.
 e.g. for a SPEC-DGS sensor that is accomplished by `serial.readline()` (see `sensors/SpecDgs.py`) and this 
@@ -46,11 +48,19 @@ puts out a host of information which may or may not be important.
 By contrast, a DHT-22 sensor, when accessed via tha [AdaFruit library](https://pypi.org/project/adafruit-io/ "Adafuit python library"),
 outputs data that you are most likely directly interested in. i.e. the "raw data" is the processed data.
 ***
+
+## `get_data()`
+
+This method is implemented by the sensor model class. It produces a dictionary of sensor data.
+
+
 ### Sensor manufacturers
 
 Sensor manufacturers are the companies that put out different sensors. In our experience, all the sensors produced by
 a sensor manufacturer have the same method to interact with the hardware, same output format, etc. 
 As such, a sensor manufacturer can implement a lot of the logic to interact with a sensor. 
+
+By contrast two different manufacturers may have wholly different ways to interact with the hardware.
 
 e.g. 
 * SPEC
@@ -67,9 +77,6 @@ example: `sensors/SpecDgs.py`
 ### Sensor model
 
 Here you implement any model-specific behaviour.
-
-Each Sensor manufacturer must implement `sensors/SensorDataFormatter.format_data()`.
-Current implementations output data as a dictionary (`sensors/Sensor.print_formatted_data()` accepts a dictionary).  
   
 
 For the purposes of consistency and precision, the following specifications are used for formatting outputs in `format_data()`:
@@ -77,7 +84,7 @@ For the purposes of consistency and precision, the following specifications are 
   * use their full name e.g. 'temperature'
   * use only lower case e.g. 'temperature'
   * use underscores when joining words e.g. 'relative_humidity'
- * chemicals
+* chemicals
   * use [condensed structural formula]('https://en.wikipedia.org/wiki/Structural_formula#Condensed_formulas') 
     e.g. '(CH3)3CH' *not* 'C4H10'
   * use their symbol as identified in the [periodic table of elements]('https://en.wikipedia.org/wiki/Periodic_table')
@@ -101,10 +108,11 @@ Example: `sensors/SpecDgs.py`
 
 ### 2. Implement the sensor model class
 
-This class extends the manufacturer class & must implement `sensors/SensorDataFormatter.py`
+This class extends the manufacturer class and implements `Sensor.get_data()`.
 
-Unless you have a very good reason you should use `sensors/Sensor.print_formatted_data()` to output your data. 
-This will keep things nice and consistent.
+A convenience method, `Senors.print_formatted_data()` can take the return value from `Sensor.get_data()` and print it
+out to console. 
+
 
 Example: `sensors/SpecCoSensor.py`
 
